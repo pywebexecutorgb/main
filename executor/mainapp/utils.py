@@ -10,25 +10,43 @@ class Docker(object):
     def __init__(self):
         self.docker_image = 'web-executor'
         self.client = docker.from_env()
-        self.container = {}
+        self.container = None
 
     @property
     def container_id(self):
         """
         :return: string, created container ID (after start call) or None
         """
-        return self.container.get('Id', None)
+        if hasattr(self.container, 'id'):
+            return self.container.id
+        return None
+
+    @property
+    def containers(self):
+        """
+        Function return list of cantainer objects
+        :return: [] containers
+        """
+        return self.client.containers.list(all=True)
 
     def start(self):
         """
         Create container.
         :return: dict, {'Id': string, 'Warnings': None or value}
         """
-        self.container = self.client.create_container(self.docker_image, detach=True)
+        self.container = self.client.containers.create(self.docker_image)
         return self.container_id
 
     def stop(self):
-        return self.client.remove_container(self.container_id)
+        """
+        Stop container.
+        :return:
+        """
+        return self.container.stop()
 
-    def list(self):
-        return self.client.containers()
+    def remove(self):
+        """
+        Remove container.
+        :return:
+        """
+        return self.container.remove()
