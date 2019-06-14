@@ -7,7 +7,13 @@ FROM web-executor-base
 MAINTAINER Andrey Kiselev "kiselevandrew@yandex.ru"
 
 COPY {{script}} {{remote}}/{{script}}
-COPY {{requirements}} {{remote}}/{{requirements}}
-RUN pip{% if interpreter == 'python3' %}3{% endif %} install -r {{remote}}/{{requirements}}
 
-CMD ["{{interpreter}}", "{{remote}}/{{script}}"]
+{% if use_pip %}
+    COPY {{requirements}} {{remote}}/{{requirements}}
+    RUN pip
+    {%- if interpreter == 'python3' -%}
+        3
+    {%- endif %} install -r {{remote}}/{{requirements}}
+{% endif %}
+
+CMD ["{{interpreter}}", "-u", "{{remote}}/{{script}}"]

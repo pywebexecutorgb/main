@@ -14,6 +14,7 @@ b'OK\n'
 # TODO: clean temporary directory
 
 import os
+import shutil
 import tempfile
 
 from django.conf import settings
@@ -22,30 +23,37 @@ import jinja2
 import docker
 
 
-def prepare_docker_exec(script_data='', requirements_data='', python_interpreter='python3'):
+def prepare_docker_exec(python_interpreter='python3', script_data='', requirements_data=''):
     """
     Prepare working directory for running script with Dockerfile
+    :param python_interpreter: string python or python3
     :param script_data: string with script value
     :param requirements_data: requirements.txt data
-    :param python_interpreter: string python or python3
-    :return string: directory path
+    :return directory path: string
     """
     workdir = tempfile.mkdtemp()
 
     try:
-        with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
-            fh.write(requirements_data)
+        use_pip = False
+        if requirements_data:
+            with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
+                fh.write(requirements_data)
+            use_pip = True
+
         with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
             fh.write(script_data)
+
         with open(os.path.join(workdir, 'Dockerfile'), 'w') as fh:
-            template = jinja2.Template(open(settings.DOCKERFILE_TEMPLATE, 'r').read())
-            fh.write(template.render(local_directory=workdir,
-                                     python_interpreter=python_interpreter))
+            fh_template = open(settings.DOCKERFILE_TEMPLATE, 'r')
+            template = jinja2.Template(fh_template.read())
+            fh.write(template.render(python_interpreter=python_interpreter,
+                                     use_pip=use_pip))
     except Exception as e:
-        os.unlink(workdir)
+        shutil.rmtree(workdir)
         return None
 
     return workdir
+
 
 class Docker(object):
     """
@@ -74,7 +82,7 @@ class Docker(object):
     @property
     def container_id(self):
         """
-        :return: string, created container ID (after start call) or None
+        :return container ID or None: string or None
         """
         if hasattr(self.container, 'id'):
             return self.container.id
@@ -94,12 +102,12 @@ class Docker(object):
         :param dockerfile_dirpath: string - directory path to Dockerfile
         :return [images object, JSON logs]:
         """
-        return self.client.images.build(path=dockerfile_dirpath)
+        return self.client.images.build(path=dockerfile_dirpath, forcerm=True)
 
     def _remove_image(self):
         """
         Force remove image with based ID
-        :return: None
+        :return None: None
         """
         return self.client.images.remove(image=self.image_id, force=True)
 
@@ -114,20 +122,78 @@ class Docker(object):
     def start(self):
         """
         Start container.
-        :return: None
+        :return None: None
         """
         return self.container.start()
 
     def stop(self):
         """
         Stop container.
-        :return None:
+        :return None: None
         """
         return self.container.stop()
 
     def remove(self):
         """
         Remove container.
-        :return None:
+        :return None: None
         """
-        return self.container.remove()
+        return self.container.remove(force=True)
+
+    def run(self):
+        """
+        Run container. Using in DockerExec class as the simplest method for run docker.
+        :return logs: string
+        """
+        return self.client.containers.run(self.image_id, auto_remove=True)
+
+
+class DockerExec(object):
+    """
+    Class that allow simple access to run python script:
+        with DockerExec("python3", '''
+            import requests
+            try:
+                print(requests.get("http://www.yandex.ru/").status_code)
+            except Exception as err:
+                print(err)
+            ''', "requests") as exec:
+                for msg in exec:
+                    print(msg)
+    """
+
+    def __init__(self, python_interpreter='python3',
+                 script_data='', requirements_data=''):
+        """
+        Init function of DockerExec
+        :param python_interpreter: string 'python' or 'python3'
+        :param script_data: string with python code
+        :param requirements_data: string with requirements.txt content
+        """
+        self.script_data = script_data
+        self.requirements_data = requirements_data
+        self.python_interpreter = python_interpreter
+
+        self.workdir = None
+        self.client = None
+
+    def __enter__(self):
+        """
+        Enter function initialize container and run script.
+        :return yield logs: [strings]
+        """
+        self.workdir = prepare_docker_exec(self.python_interpreter,
+                                           self.script_data,
+                                           self.requirements_data)
+        self.client = Docker(self.workdir)
+        logs = self.client.run()
+        for line in logs.decode('utf-8').split('\n'):
+            yield line
+
+    def __exit__(self, *args):
+        """
+        Function remove all objects
+        :return None: None
+        """
+        del self.client
+        shutil.rmtree(self.workdir)
