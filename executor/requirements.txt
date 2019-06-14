@@ -2,4 +2,5 @@ Django==2.2.2
 django-debug-toolbar==1.11
 django-debug-toolbar-template-profiler==1.0.2
 django-extensions==2.1.9
+Jinja2==2.10.1
 docker==4.0.1

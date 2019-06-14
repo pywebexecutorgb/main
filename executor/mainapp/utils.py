@@ -1,4 +1,47 @@
+"""
+How you can use it:
+
+> import mainapp.utils
+> tempdir = mainapp.utils.prepare_docker_exec('print("OK")')
+> docker = mainapp.utils.Docker(tempdir)
+> docker.create()
+'8c3b628976a990222deefed8662e7eff09f506da02f6b48bbf5a3b8ed8f1ff98'
+> docker.start()
+> docker.container.logs()
+b'OK\n'
+"""
+
+# TODO: clean temporary directory
+
+import os
+import tempfile
+
+from django.conf import settings
+
+import jinja2
 import docker
+
+
+def prepare_docker_exec(script_data='', requirements_data='', python_interpreter='python3'):
+    """
+    Prepare working directory for running script with Dockerfile
+    :param script_data: string with script value
+    :param requirements_data: requirements.txt data
+    :param python_interpreter: string python or python3
+    :return string: directory path
+    """
+    workdir = tempfile.mkdtemp()
+
+    with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
+        fh.write(requirements_data)
+    with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
+        fh.write(script_data)
+    with open(os.path.join(workdir, 'Dockerfile'), 'w') as fh:
+        template = jinja2.Template(open(settings.DOCKERFILE_TEMPLATE, 'r').read())
+        fh.write(template.render(local_directory=workdir,
+                                 python_interpreter=python_interpreter))
+
+    return workdir
 
 
 class Docker(object):
@@ -57,13 +100,20 @@ class Docker(object):
         """
         return self.client.images.remove(image=self.image_id, force=True)
 
-    def start(self):
+    def create(self):
         """
         Create container.
         :return {'Id': string, 'Warnings': None or value}: dict
         """
         self.container = self.client.containers.create(self.image_id)
         return self.container_id
+
+    def start(self):
+        """
+        Start container.
+        :return: None
+        """
+        return self.container.start()
 
     def stop(self):
         """
