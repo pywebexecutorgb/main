@@ -1,4 +1,8 @@
 """
+At the first you need to prepare init image:
+$ docker build --tag web-executor-base --file Dockerfile .
+from Dockerfile in root directory of the project!
+
 How you can use it:
 
 > import mainapp.utils

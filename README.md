@@ -16,3 +16,8 @@ MVP+ (при условии, что хватит времени):
 - дизассемблирование строк кода (модуль dis)
 - подсветка python синтаксиса (markdown)"
 
+Перед началом работы нужно собрать стартовый образ docker с тегом web-executor-base  
+из Dockerfile, который расположен в корневой директории проекта:
+
+    $ docker build --tag web-executor-base --file Dockerfile .
+
