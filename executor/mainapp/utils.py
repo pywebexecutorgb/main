@@ -32,17 +32,20 @@ def prepare_docker_exec(script_data='', requirements_data='', python_interpreter
     """
     workdir = tempfile.mkdtemp()
 
-    with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
-        fh.write(requirements_data)
-    with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
-        fh.write(script_data)
-    with open(os.path.join(workdir, 'Dockerfile'), 'w') as fh:
-        template = jinja2.Template(open(settings.DOCKERFILE_TEMPLATE, 'r').read())
-        fh.write(template.render(local_directory=workdir,
-                                 python_interpreter=python_interpreter))
+    try:
+        with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
+            fh.write(requirements_data)
+        with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
+            fh.write(script_data)
+        with open(os.path.join(workdir, 'Dockerfile'), 'w') as fh:
+            template = jinja2.Template(open(settings.DOCKERFILE_TEMPLATE, 'r').read())
+            fh.write(template.render(local_directory=workdir,
+                                     python_interpreter=python_interpreter))
+    except Exception as e:
+        os.unlink(workdir)
+        return None
 
     return workdir
-
 
 class Docker(object):
     """
