@@ -19,12 +19,14 @@ b'OK\n'
 
 import os
 import shutil
+import string
 import tempfile
 
 from django.conf import settings
 
 import jinja2
 import docker
+import short_url
 
 
 def prepare_docker_exec(python_interpreter='python3', script_data='', requirements_data=''):
@@ -201,3 +203,39 @@ class DockerExec(object):
         """
         del self.client
         shutil.rmtree(self.workdir)
+
+
+class ShortURL(object):
+    """
+    Convert string to long or short presentation.
+        short_cls = ShortURL()
+        short_cls.encode(1234567890)
+'           bvIhFu'
+        short_cls.decode('bvIhFu')
+            1234567890
+    """
+    def __init__(self):
+        """
+        Init base variable short_url.
+        """
+        self.short_url = short_url.UrlEncoder(alphabet=
+                                              string.ascii_lowercase +
+                                              string.ascii_uppercase +
+                                              '0123456789',
+                                              block_size=0)
+
+    def encode(self, value):
+        """
+        Return short form of input interger value
+        :param value: interger ID
+        :return shortened URL: string
+        """
+        return self.short_url.encode_url(value)
+
+    def decode(self, value):
+        """
+        Return long form of input string value
+        :param value: string URL
+        :return integer: source integer value
+        """
+        return self.short_url.decode_url(value)
