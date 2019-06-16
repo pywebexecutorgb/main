@@ -16,4 +16,4 @@ COPY {{script}} {{remote}}/{{script}}
     {%- endif %} install -r {{remote}}/{{requirements}}
 {% endif %}
 
-CMD ["{{interpreter}}", "-u", "{{remote}}/{{script}}"]
+CMD ["{{interpreter}}", "-u", "-m", "cProfile", "-s", "time", "{{remote}}/{{script}}"]

@@ -6,16 +6,25 @@ from Dockerfile in root directory of the project!
 How you can use it:
 
 > import mainapp.utils
-> tempdir = mainapp.utils.prepare_docker_exec('print("OK")')
+> tempdir = mainapp.utils.prepare_docker_exec('python3', 'print("OK")')
 > docker = mainapp.utils.Docker(tempdir)
 > docker.create()
 '8c3b628976a990222deefed8662e7eff09f506da02f6b48bbf5a3b8ed8f1ff98'
 > docker.start()
 > docker.container.logs()
 b'OK\n'
+
+> with DockerExec("python3", '''
+>     import requests
+>     try:
+>         print(requests.get("http://www.yandex.ru/").status_code)
+>     except Exception as err:
+>         print(err)
+>     ''', "requests") as exec:
+>     for msg in exec:
+>         print(msg)
 """
 
-# TODO: clean temporary directory
 
 import os
 import shutil
@@ -214,6 +223,7 @@ class ShortURL(object):
         short_cls.decode('bvIhFu')
             1234567890
     """
+
     def __init__(self):
         """
         Init base variable short_url.
