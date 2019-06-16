@@ -1,31 +1,43 @@
 '''
-    > output, profile = [], []
-    > from mainapp.utils import DockerExec
-    > with DockerExec('python3', """
-    > import requests
-    > try:
-    >     print(requests.get("http://www.yandex.ru/").status_code)
-    > except Exception as err:
-    >     print(err)
-    > """, "requests") as exec:
-    >     profile_flag = False
-    >     for msg in exec:
-    >         if 'function calls' in msg:
-    >             profile_flag = True
-    >         if profile_flag:
-    >             profile.append(msg)
-    >             continue
-    >         output.append(msg)
-    >         print(msg)
-    200
-    > import mainapp.models
-    > p = mainapp.models.CodeBase(pk=1)
-    > p
-    <CodeBase: 1 (, False)>
-    > t = mainapp.models.CodeExecution(code=p, output='\n'.join(output), profile='\n'.join(profile))
-    > t.save()
-'''
+> output, profile = [], []
+> command = """
+> import requests
+> try:
+>     print(requests.get("http://www.yandex.ru/").status_code)
+> except Exception as err:
+>     print(err)
+> """
 
+> from mainapp.utils import DockerExec
+> with DockerExec('python3', command, "requests") as exec:
+>     profile_flag = False
+>     for msg in exec:
+>         if 'function calls' in msg:
+>             profile_flag = True
+>         if profile_flag:
+>             profile.append(msg)
+>             continue
+>         output.append(msg)
+>         print(msg)
+    200
+
+> from mainapp.models import CodeBase, CodeExecution
+> codebase = CodeBase(code_text=command)
+> codebase.save()
+> codebase
+    <CodeBase: 1 (
+    import requests
+    try:
+        print(, False)>
+
+> code_exec = CodeExecution(code=codebase, output='\n'.join(output), profile='\n'.join(profile))
+> code_exec.save()
+> code_exec
+    <CodeExecution: 1 (
+    import requests
+    try:
+        print(, 200,          190125 function calls ()>
+'''
 
 from django.db import models
 
