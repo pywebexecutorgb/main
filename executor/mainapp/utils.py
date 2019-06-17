@@ -5,33 +5,33 @@ from Dockerfile in root directory of the project!
 
 How you can use it:
 
-> import mainapp.utils
-> tempdir = mainapp.utils.prepare_docker_exec('python3', 'print("OK")')
-> docker = mainapp.utils.Docker(tempdir)
-> docker.create()
-'8c3b628976a990222deefed8662e7eff09f506da02f6b48bbf5a3b8ed8f1ff98'
-> docker.start()
-> docker.container.logs()
-b'OK\n'
+import mainapp.utils
+tempdir = mainapp.utils.prepare_docker_exec('python3', 'print("OK")')
+docker = mainapp.utils.Docker(tempdir)
+docker.create()
+    '8c3b628976a990222deefed8662e7eff09f506da02f6b48bbf5a3b8ed8f1ff98'
+docker.start()
+docker.container.logs()
+    b'OK\n'
 
-> with DockerExec("python3", '''
->     import requests
->     try:
->         print(requests.get("http://www.yandex.ru/").status_code)
->     except Exception as err:
->         print(err)
->     ''', "requests") as exec:
->     for msg in exec:
->         print(msg)
+with DockerExec("python3", '''
+import requests
+try:
+    print(requests.get("http://www.yandex.ru/").status_code)
+except Exception as err:
+    print(err)
+''', "requests") as exec:
+    print(exec.stdout, exec.stdout)
 """
-
 
 import os
 import shutil
 import string
 import tempfile
+import types
 
 from django.conf import settings
+# from django.template.loader import render_to_string
 
 import jinja2
 import docker
@@ -59,10 +59,15 @@ def prepare_docker_exec(python_interpreter='python3', script_data='', requiremen
             fh.write(script_data)
 
         with open(os.path.join(workdir, 'Dockerfile'), 'w') as fh:
+            # Use jinja2 templates instead django:
+            # fh.write(render_to_string(settings.DOCKERFILE_TEMPLATE,
+            #                           {'python_interpreter': python_interpreter,
+            #                            'use_pip': use_pip}))
             fh_template = open(settings.DOCKERFILE_TEMPLATE, 'r')
             template = jinja2.Template(fh_template.read())
             fh.write(template.render(python_interpreter=python_interpreter,
                                      use_pip=use_pip))
+
     except Exception as e:
         shutil.rmtree(workdir)
         return None
@@ -83,6 +88,11 @@ class Docker(object):
         self.container = None
 
     def __del__(self):
+        try:
+            self.container.remove()
+        except Exception:
+            pass
+
         return self._remove_image()
 
     @property
@@ -160,7 +170,9 @@ class Docker(object):
         Run container. Using in DockerExec class as the simplest method for run docker.
         :return logs: string
         """
-        return self.client.containers.run(self.image_id, auto_remove=True)
+        self.container = self.client.containers.run(self.image_id, detach=True,
+                                                    stdout=True, stderr=True)
+        return self.container
 
 
 class DockerExec(object):
@@ -191,19 +203,32 @@ class DockerExec(object):
 
         self.workdir = None
         self.client = None
+        self.container = None
 
     def __enter__(self):
         """
         Enter function initialize container and run script.
-        :return yield logs: [strings]
+        :return object: with attrs "stdout" and "stderr"
         """
+        return_obj = types.SimpleNamespace()
+        return_obj.stdout = None
+        return_obj.stderr = None
+
         self.workdir = prepare_docker_exec(self.python_interpreter,
                                            self.script_data,
                                            self.requirements_data)
+
         self.client = Docker(self.workdir)
-        logs = self.client.run()
-        for line in logs.decode('utf-8').split('\n'):
-            yield line
+        try:
+            container = self.client.run()
+            container.wait(timeout=60)
+        except Exception as err:
+            return_obj.stderr = str(err)
+            return return_obj
+
+        return_obj.stdout = container.logs(stdout=True, stderr=False).decode('utf-8')
+        return_obj.stderr = container.logs(stdout=False, stderr=True).decode('utf-8')
+        return return_obj
 
     def __exit__(self, *args):
         """
