@@ -118,7 +118,7 @@ if DEBUG:
     INSTALLED_APPS.extend(['debug_toolbar',
                            'template_profiler_panel',
                            'django_extensions'])
-    MIDDLEWARE.extend(['debug_toolbar.middleware.DebugToolbarMiddleware'])
+    # MIDDLEWARE.extend(['debug_toolbar.middleware.DebugToolbarMiddleware'])
 
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda *args: True,

@@ -77,7 +77,7 @@ class CodeBase(models.Model):
         return f"""{self.pk}
                 interpreter='{self.get_interpreter_display()}'
                 code='{self.code_text[:64]}'
-                dependencies='{self.dependencies[:32]}'"""
+                dependencies='{self.dependencies}'"""
 
 
 class CodeExecution(models.Model):
@@ -85,7 +85,7 @@ class CodeExecution(models.Model):
         verbose_name = "User's code result"
         verbose_name_plural = "User's code results"
 
-    code = models.ForeignKey(CodeBase, related_name='Code', on_delete=models.CASCADE)
+    code = models.OneToOneField(CodeBase, on_delete=models.CASCADE, primary_key=True)
     processed_at = models.DateTimeField(verbose_name='Execution timestamp', auto_now_add=True)
     has_errors = models.BooleanField(verbose_name='Does code have errors?', default=False)
 
@@ -97,5 +97,4 @@ class CodeExecution(models.Model):
         return f"""{self.pk}:
                 code='{self.code.code_text[:32]}',
                 has_errors='{self.has_errors}'
-                output='{self.output[:32]}',
-                profile='{self.profile[:32]}'"""
+                output='{self.output[:32]}'"""

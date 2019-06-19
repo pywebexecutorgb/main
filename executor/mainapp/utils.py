@@ -51,9 +51,9 @@ def prepare_docker_exec(python_interpreter='python3', script_data='', requiremen
     try:
         use_pip = False
         if requirements_data:
+            use_pip = True
             with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
                 fh.write(requirements_data)
-            use_pip = True
 
         with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
             fh.write(script_data)
