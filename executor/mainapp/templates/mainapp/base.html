@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>
+    {% block title %}
+        {{ title|title }}
+    {% endblock %}
+    </title>
+
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+    {% endblock %}
+
+    {% block js %}
+    {% endblock %}
+
+</head>
+<body>
+  <div class="wrapper">
+     <div class="top">
+       <div class="container">
+         <div class="header">
+          {% block header %}
+           block header
+           {% include 'mainapp/includes/toolbar_menu.html' %}
+          {% endblock %}
+         </div>
+         <div class="content">
+            {% block content %}
+
+            {% endblock %}
+         </div>
+      </div>
+    </div>
+    <div class="footer">
+      {% block footer %}
+         block footer
+        {% include 'mainapp/includes/footer.html' %}
+      {% endblock %}
+     </div>
+  </div>
+</body>
+</html>

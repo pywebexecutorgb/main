@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    background-color: greenyellow;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.top {
+    flex: 1 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content {
+    background-color: aqua;
+}
+
+.footer {
+    flex: 0 0 auto;
+    background-color: lightblue;
+    margin: 0 auto;
+    width: 100%;
+}
