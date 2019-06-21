@@ -1,19 +1,22 @@
 from django.shortcuts import render
 
-links_main_menu = [
+activity_buttons = [
 {
-    'href': '#', 'name': 'Запустить'
+    'href': 'index', 'name': 'run'
 },
 {
-    'href': '#', 'name': 'Сохранить'
+    'href': 'index', 'name': 'save'
+},
+{
+    'href': 'index', 'name': 'new'
 },
 ]
 
-def toolbar_menu(request):
-    title = 'PyExecutor'
+def main(request):
+    title = 'WebExecutor'
     content = {
         'title': title,
-        'links_main_menu': links_main_menu,
+        'activity_buttons': activity_buttons,
     }
 
     return render(request, 'mainapp/index.html', content)

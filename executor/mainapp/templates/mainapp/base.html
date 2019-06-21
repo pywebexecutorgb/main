@@ -14,9 +14,6 @@
         <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
     {% endblock %}
 
-    {% block js %}
-    {% endblock %}
-
 </head>
 <body>
   <div class="wrapper">
@@ -24,23 +21,27 @@
        <div class="container">
          <div class="header">
           {% block header %}
-           block header
-           {% include 'mainapp/includes/toolbar_menu.html' %}
+           {% include 'mainapp/includes/header.html' %}
           {% endblock %}
          </div>
          <div class="content">
             {% block content %}
-
+               
             {% endblock %}
          </div>
       </div>
     </div>
     <div class="footer">
+
       {% block footer %}
-         block footer
         {% include 'mainapp/includes/footer.html' %}
       {% endblock %}
+
      </div>
+
+     {% block js %}
+     {% endblock %}
+
   </div>
 </body>
 </html>

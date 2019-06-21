@@ -1,0 +1,20 @@
+{% load static %}
+
+<div class="logo">
+  <a href="{% url 'index' %}"><img class="img_logo" src="{% static 'img/WebExecutor.jpg' %}"  alt="WebExecutor"></a>
+</div>
+
+<div class="activity_buttons">
+   <ul class="list_activity_buttons">
+   
+    {% for item in activity_buttons %}
+
+            <li><a class="li_activity_buttons" href="{% url item.href %}">{{ item.name }}</a>            </li>
+
+    {% endfor %}
+    </ul>
+</div>
+
+<div class="user_panel">
+    nishadrin
+</div>
