@@ -31,7 +31,6 @@ body {
     background-color: whitesmoke;
     display: flex;
     min-height: 6%;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -47,10 +46,12 @@ body {
 .logo {
     display: flex;
     padding-left: 15px;
+    width: 18%;
 }
 
 .img_logo {
     width: 60px;
+    display: flex;
 }
 
 .list_activity_buttons {
@@ -80,13 +81,17 @@ body {
 
 
 .user_panel {
+    width: 41%;
     display: flex;
     padding-right: 15px;
+    justify-content: flex-end;
 }
 
 .activity_buttons {
+    width: 41%;
     display: flex;
     height: 100%;
+    justify-content: center;
 }
 
 .content {
@@ -110,4 +115,10 @@ body {
     width: 41%;
     height: 100%;
     border: 2px solid black;
+}
+
+.fas {
+    display: flex;
+    margin-left: 10px;
+    font-size: 18px;
 }

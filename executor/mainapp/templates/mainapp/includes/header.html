@@ -9,12 +9,23 @@
    
     {% for item in activity_buttons %}
 
-            <li><a class="li_activity_buttons" href="{% url item.href %}">{{ item.name }}</a>            </li>
+            <li><a class="li_activity_buttons" href="{% url item.href %}">{{ item.name }}
+<!--               Add main icons-->
+                {% if item.name == "run" %}
+                    <i class="fas fa-play"></i>
+                {% endif %}
+                {% if item.name == "save" %}
+                    <i class="fas fa-save"></i>
+                {% endif %}
+                {% if item.name == "new" %}
+                    <i class="fas fa-plus"></i>
+                {% endif %}
+            </a></li>
 
     {% endfor %}
     </ul>
 </div>
 
 <div class="user_panel">
-    nishadrin
+    user_name
 </div>
