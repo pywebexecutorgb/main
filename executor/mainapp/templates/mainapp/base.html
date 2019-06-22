@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>
+    {% block title %}
+        {{ title|title }}
+    {% endblock %}
+    </title>
+
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+    {% endblock %}
+
+</head>
+<body>
+  <div class="wrapper">
+     <div class="top">
+       <div class="container">
+         <div class="header">
+          {% block header %}
+           {% include 'mainapp/includes/header.html' %}
+          {% endblock %}
+         </div>
+         <div class="content">
+            {% block content %}
+               
+            {% endblock %}
+         </div>
+      </div>
+    </div>
+    <div class="footer">
+
+      {% block footer %}
+        {% include 'mainapp/includes/footer.html' %}
+      {% endblock %}
+
+     </div>
+
+     {% block js %}
+<!--     Icons from fontawesome-->
+     <script src="https://kit.fontawesome.com/e6303f002c.js"></script>
+     {% endblock %}
+
+  </div>
+</body>
+</html>

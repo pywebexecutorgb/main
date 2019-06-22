@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    height:92.3%
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.top {
+    flex: 1 0 auto;
+}
+
+.header {
+    background-color: whitesmoke;
+    display: flex;
+    min-height: 6%;
+    align-items: center;
+}
+
+
+
+.footer {
+    flex: 0 0 auto;
+    background-color: lightblue;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    padding-left: 15px;
+    width: 18%;
+}
+
+.img_logo {
+    width: 60px;
+    display: flex;
+}
+
+.list_activity_buttons {
+    display: flex;
+    list-style-type: none;
+    height: 100%;
+}
+
+.li_activity_buttons {
+    padding: 18px 8px 12px 8px;
+    display: block;
+    color: #8c8c8c;
+    font-size: 20px;
+    font-weight: 300;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-right: 20px;
+    border-bottom: 5px solid khaki;
+}
+
+.li_activity_buttons:hover {
+    color: #212121;
+    background-color: white;
+    border-bottom: 5px solid steelblue;
+}
+
+
+
+.user_panel {
+    width: 41%;
+    display: flex;
+    padding-right: 15px;
+    justify-content: flex-end;
+}
+
+.activity_buttons {
+    width: 41%;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+}
+
+.content {
+    display: flex;
+    height: 100%;
+}
+
+.settings_py3 {
+    width: 18%;
+    height: 100%;
+    border: 2px solid black;
+}
+
+.input_window {
+    width: 41%;
+    height: 100%;
+    border: 2px solid black;
+}
+
+.output_window {
+    width: 41%;
+    height: 100%;
+    border: 2px solid black;
+}
+
+.fas {
+    display: flex;
+    margin-left: 10px;
+    font-size: 18px;
+}
