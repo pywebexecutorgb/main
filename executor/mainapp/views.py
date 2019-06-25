@@ -16,8 +16,20 @@ class CodeCreate(CreateView):
 
 class CodeRead(DetailView):
     model = CodeBase
+    template_name = 'mainapp/codebase_form.html'
 
     def get_queryset(self):
         return CodeBase.objects.select_related(
             'codeexecution'
         ).filter(pk=self.kwargs.get('pk'))
+
+    def get_context_data(self, **kwargs):
+        context = super(CodeRead, self).get_context_data(**kwargs)
+
+        form = CodeBaseForm(initial={
+            'interpreter': self.object.interpreter,
+            'code_text': self.object.code_text,
+            'dependencies': self.object.dependencies})
+        context.update({'form': form})
+
+        return context

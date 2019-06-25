@@ -6,11 +6,14 @@
 FROM web-executor-base
 MAINTAINER Andrey Kiselev "kiselevandrew@yandex.ru"
 
+USER exec-user
+WORKDIR /home/exec-user
+
 COPY {{script}} {{remote}}/{{script}}
 
 {% if use_pip %}
     COPY {{requirements}} {{remote}}/{{requirements}}
-    RUN pip{% if interpreter == 'python3' %}3{% endif %} install -r {{remote}}/{{requirements}}
+    RUN pip{% if interpreter == 'python3' %}3{% endif %} install --user -r {{remote}}/{{requirements}}
 {% endif %}
 
 CMD ["{{interpreter}}", "-u", "-m", "cProfile", "-s", "time", "{{remote}}/{{script}}"]

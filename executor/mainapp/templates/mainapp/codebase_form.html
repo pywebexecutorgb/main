@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Python webExecutor</title>
+
+    <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <header>
+        Header: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, nam.
+    </header>
+    <div class="top">
+        <div class="content">
+            <div class="input-block">
+                <form action="{% url 'mainapp:index' %}" class="input-form" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <div style="display: flex; justify-content: space-around">
+                        <button type="submit" class="run-button btn btn-outline-secondary">Execute code</button>
+                        <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">Clear form</button>
+                    </div>
+                </form>
+            </div>
+            <div class="result-block">
+                <div class="result form-group">
+                    <label for="output-result">Result</label>
+                    <textarea id="output-result"
+                              class="{% if codebase.codeexecution.has_errors %}error-message{% endif %}"
+                              readonly>> {{ codebase.codeexecution.output }}</textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer class="site-footer">
+        Footer: Lorem ipsum dolor sit amet.
+    </footer>
+</div>
+{#<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>#}
+<script src="{% static 'mainapp/js/main.js' %}"></script>
+</body>
+</html>

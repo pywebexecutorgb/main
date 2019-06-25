@@ -1,10 +1,13 @@
-{% set remote = remote_directory | default("/") %}
+{% set remote = remote_directory | default("") %}
 {% set requirements = requirements_path | default("requirements.txt") %}
 {% set script = script_filename | default("exec.py") %}
 {% set interpreter = python_interpreter | default("python3") %}
 
 FROM web-executor-base
 MAINTAINER Andrey Kiselev "kiselevandrew@yandex.ru"
+
+USER exec-user
+WORKDIR /home/exec-user
 
 COPY {{script}} {{remote}}/{{script}}
 
@@ -13,7 +16,7 @@ COPY {{script}} {{remote}}/{{script}}
     RUN pip
     {%- if interpreter == 'python3' -%}
         3
-    {%- endif %} install -r {{remote}}/{{requirements}}
+    {%- endif %} install --user -r {{remote}}/{{requirements}}
 {% endif %}
 
 CMD ["{{interpreter}}", "-u", "-m", "cProfile", "-s", "time", "{{remote}}/{{script}}"]
