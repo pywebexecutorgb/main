@@ -61,6 +61,11 @@ header, footer {
     display: block;
 }
 
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
 .run-button,
 .clear-button {
     width: 150px;

@@ -25,7 +25,7 @@
                 <form action="{% url 'mainapp:index' %}" class="input-form" method="post">
                     {% csrf_token %}
                     {{ form }}
-                    <div style="display: flex; justify-content: space-around">
+                    <div class="buttons">
                         <button type="submit" class="run-button btn btn-outline-secondary">Execute code</button>
                         <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">Clear form</button>
                     </div>
@@ -35,7 +35,8 @@
                 <div class="result form-group">
                     <label for="output-result">Result</label>
                     <textarea id="output-result"
-                              class="{% if codebase.codeexecution.has_errors %}error-message{% endif %}"
+                              class="{% if codebase.codeexecution.has_errors %}error-message{% endif %}
+                                     {% if not codebase.codeexecution.output %}blinking{% endif %}"
                               readonly>> {{ codebase.codeexecution.output }}</textarea>
                 </div>
             </div>
