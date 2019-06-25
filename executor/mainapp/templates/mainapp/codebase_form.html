@@ -37,7 +37,7 @@
                     <textarea id="output-result"
                               class="{% if codebase.codeexecution.has_errors %}error-message{% endif %}
                                      {% if not codebase.codeexecution.output %}blinking{% endif %}"
-                              readonly>> {{ codebase.codeexecution.output }}</textarea>
+                              readonly>&#9646; {{ codebase.codeexecution.output }}</textarea>
                 </div>
             </div>
         </div>

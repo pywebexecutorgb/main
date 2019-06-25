@@ -12,16 +12,14 @@ btn.addEventListener('click', (e) => {
 });
 
 let outputResult = document.getElementById('output-result');
-setInterval(function () {
-    if (!outputResult.classList.contains('blinking')) {
-        return;
-    }
-
-    if (outputResult.classList.contains('on')) {
-        outputResult.textContent = null;
-        outputResult.classList.remove('on');
-    } else {
-        outputResult.textContent = '>';
-        outputResult.classList.add('on');
-    }
-}, 1000);
+if (outputResult.classList.contains('blinking')) {
+    setInterval(function () {
+        if (outputResult.classList.contains('on')) {
+            outputResult.innerHTML = '&#9646;';
+            outputResult.classList.remove('on');
+        } else {
+            outputResult.innerHTML = '&#9647;';
+            outputResult.classList.add('on');
+        }
+    }, 700);
+}
