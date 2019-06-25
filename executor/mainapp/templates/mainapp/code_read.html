@@ -1,0 +1,23 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div>
+        <p>Code:</p>
+        <p>{{ object.code.code_text }}</p>
+        <p>Imports:</p>
+        <p>{{ object.code.dependencies }}</p>
+        <p>Python version</p>
+        <p>{{ object.code.get_interpreter_display }}</p>
+    </div>
+
+    <div>
+        <p>Output:</p>
+        <p>{{ object.output }}</p>
+        <p>Profile:</p>
+        <p>{{ object.profile }}</p>
+    </div>
+
+
+{% endblock %}
