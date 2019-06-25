@@ -14,7 +14,9 @@ body {
 
 .container {
     margin: 0 auto;
-    height:92.3%
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .wrapper {
@@ -97,24 +99,26 @@ body {
 .content {
     display: flex;
     height: 100%;
+    flex: 1;
+}
+
+.column_area {
+    height: 100%;
+    border:solid black;
+    border-width: 2px 1px;
+    box-sizing: border-box;
 }
 
 .settings_py3 {
     width: 18%;
-    height: 100%;
-    border: 2px solid black;
 }
 
 .input_window {
     width: 41%;
-    height: 100%;
-    border: 2px solid black;
 }
 
 .output_window {
     width: 41%;
-    height: 100%;
-    border: 2px solid black;
 }
 
 .fas {
