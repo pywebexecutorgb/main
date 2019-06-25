@@ -20,7 +20,10 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('', mainapp.main, name='index'),
+    path('', mainapp.CodeCreate.as_view(), name='index'),
+    # path('create/', mainapp.CodeCreate.as_view(), name='index'),
+    path('read/<int:pk>/', mainapp.CodeRead.as_view(), name='read'),
+
     path('admin/', admin.site.urls),
 ]
 
