@@ -31,11 +31,33 @@ import tempfile
 import types
 
 from django.conf import settings
-# from django.template.loader import render_to_string
 
 import jinja2
 import docker
 import short_url
+
+
+def convert_output_to_profile(input=''):
+    """
+    Function split input text on output and profile result
+    :param input: string, input text
+    :return (output, profile output): string, string
+    """
+    if not input:
+        return ("string doesn't defined", None)
+
+    profile, output = [], []
+    profile_starts_flag = False
+    for line in input.split('\n'):
+        if 'function calls' in line:
+            profile_starts_flag = True
+        if profile_starts_flag:
+            profile.append(line)
+            continue
+        output.append(line)
+
+    return ('\n'.join(output),
+            '\n'.join(profile))
 
 
 def prepare_docker_exec(python_interpreter='python3', script_data='', requirements_data=''):
@@ -51,9 +73,9 @@ def prepare_docker_exec(python_interpreter='python3', script_data='', requiremen
     try:
         use_pip = False
         if requirements_data:
+            use_pip = True
             with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
                 fh.write(requirements_data)
-            use_pip = True
 
         with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
             fh.write(script_data)
