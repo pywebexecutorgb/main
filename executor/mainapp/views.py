@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import DetailView, CreateView
 
@@ -11,6 +12,9 @@ class CodeCreate(CreateView):
     form_class = CodeBaseForm
 
     def get_success_url(self):
+        if self.request.is_ajax():
+            return reverse('mainapp:ajax_read', args=(self.object.pk,))
+
         return reverse('mainapp:read', args=(self.object.pk,))
 
 
@@ -33,3 +37,9 @@ class CodeRead(DetailView):
         context.update({'form': form})
 
         return context
+
+def code_read_ajax(request, pk):
+    if request.is_ajax():
+        qs = get_object_or_404(CodeExecution, pk=pk)
+        return JsonResponse({'output': qs.output,
+                             'has_errors': qs.has_errors})
