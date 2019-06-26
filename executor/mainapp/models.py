@@ -49,6 +49,8 @@ code_exec
                     profile='         190188 function calls ('>
 '''
 
+from hashlib import sha3_512
+
 from django.db import models
 
 
@@ -70,7 +72,9 @@ class CodeBase(models.Model):
                                                    default=INTERPRETER_PYTHON3)
     code_text = models.CharField(verbose_name='Code text', max_length=2048)
     dependencies = models.CharField(verbose_name='requirements.txt', max_length=256,
-                                    null=True, blank=True, default=None)
+                                    blank=True, default='')
+    hash_digest = models.CharField(verbose_name='SHA-512 digest of code text', max_length=128,
+                                   null=True, blank=True, default=None, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -78,6 +82,19 @@ class CodeBase(models.Model):
                 interpreter='{self.get_interpreter_display()}'
                 code='{self.code_text[:64]}'
                 dependencies='{self.dependencies}'"""
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        """
+        Digest doesn't include python, because python2 is deprecated
+        and we don't allow use it.
+        """
+        self.hash_digest = sha3_512(self.code_text.encode('utf-8') +
+                                    self.dependencies.encode('utf-8')).hexdigest()
+        return super(CodeBase, self).save()
+
+    @classmethod
+    def has_digest(cls, digest=None):
+        return cls.objects.filter(hash_digest=digest).first()
 
 
 class CodeExecution(models.Model):
