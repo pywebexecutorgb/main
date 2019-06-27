@@ -22,11 +22,11 @@
     <div class="top">
         <div class="content">
             <div class="input-block">
-                <form action="{% url 'mainapp:index' %}" class="input-form" method="post">
+                <form action="{% url 'mainapp:index' %}" class="input-form" method="post" id="code_create_form">
                     {% csrf_token %}
                     {{ form }}
                     <div class="buttons">
-                        <button type="submit" class="run-button btn btn-outline-secondary">Execute code</button>
+                        <button type="submit" class="run-button btn btn-outline-secondary" id="execute_button">Execute code</button>
                         <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">Clear form</button>
                     </div>
                 </form>
@@ -49,5 +49,6 @@
 </div>
 {#<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>#}
 <script src="{% static 'mainapp/js/main.js' %}"></script>
+<script src="{% static 'mainapp/js/code_ajax.js' %}"></script>
 </body>
 </html>
