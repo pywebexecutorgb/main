@@ -22,12 +22,17 @@
     <div class="top">
         <div class="content">
             <div class="input-block">
+                <div id="loader" hidden="hidden"></div>
                 <form action="{% url 'mainapp:index' %}" class="input-form" method="post" id="code_create_form">
                     {% csrf_token %}
                     {{ form }}
                     <div class="buttons">
-                        <button type="submit" class="run-button btn btn-outline-secondary" id="execute_button">Execute code</button>
-                        <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">Clear form</button>
+                        <button type="submit" class="run-button btn btn-outline-secondary" id="execute_button">
+                            Execute code
+                        </button>
+                        <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">
+                            Clear form
+                        </button>
                     </div>
                 </form>
             </div>
@@ -48,6 +53,7 @@
     </footer>
 </div>
 {#<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>#}
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>#}
 <script src="{% static 'mainapp/js/main.js' %}"></script>
 <script src="{% static 'mainapp/js/code_ajax.js' %}"></script>
 </body>
