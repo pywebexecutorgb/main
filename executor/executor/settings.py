@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
+    'authapp.apps.AuthappConfig',
 ]
 
 MIDDLEWARE = [
@@ -113,6 +114,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 if DEBUG:
     INTERNAL_IPS = ['127.0.0.1', '::1']
     INSTALLED_APPS.extend(['debug_toolbar',
@@ -142,3 +146,5 @@ if DEBUG:
     ]
 
 DOCKERFILE_TEMPLATE = os.path.join(BASE_DIR, 'mainapp', 'templates', 'Dockerfile.j2')
+
+AUTH_USER_MODEL = 'authapp.PyWebUser'
