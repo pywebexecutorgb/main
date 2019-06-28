@@ -1,10 +1,12 @@
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from hashlib import sha3_512
+
 from django.urls import reverse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, CreateView
 
 from mainapp.forms import CodeBaseForm
-from mainapp.models import CodeBase, CodeExecution
+from mainapp.models import CodeBase
 
 
 class CodeCreate(CreateView):
@@ -16,6 +18,19 @@ class CodeCreate(CreateView):
             return reverse('mainapp:ajax_read', args=(self.object.pk,))
 
         return reverse('mainapp:read', args=(self.object.pk,))
+
+    def form_valid(self, form):
+        """
+        Validate that executable code doesn't exist
+        :param form: django form object
+        :return: redirect on exists code or make form_valid()
+        """
+        hash_digest = sha3_512(form.instance.code_text.encode('utf-8') +
+                               form.instance.dependencies.encode('utf-8')).hexdigest()
+        object_by_hash = CodeBase.has_digest(hash_digest)
+        if object_by_hash:
+            return HttpResponseRedirect(reverse('mainapp:read', args=(object_by_hash.pk,)))
+        return super(CodeCreate, self).form_valid(form)
 
 
 class CodeRead(DetailView):

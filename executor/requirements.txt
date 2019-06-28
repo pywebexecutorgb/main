@@ -5,3 +5,4 @@ django-extensions==2.1.9
 Jinja2==2.10.1
 docker==4.0.1
 short-url==1.2.2
+djangorestframework

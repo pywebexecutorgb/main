@@ -22,10 +22,12 @@ urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('mainapp:index'),
                                   permanent=False)),
     path('code/', include('mainapp.urls', namespace='mainapp')),
+    path('api/', include('api.urls', namespace='api')),
 
     path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += path('__debug__/', include(debug_toolbar.urls)),

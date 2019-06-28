@@ -18,7 +18,7 @@ window.onload = () => { // после загрузки страницы наве
 
 
     // отправляем AJAX-запрос
-    hReq.open('POST', '/code/create/', true);
+    hReq.open('POST', '/api/code-base/', true);
     hReq.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     hReq.send(data);
 
