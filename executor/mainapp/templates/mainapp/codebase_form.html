@@ -23,6 +23,9 @@
         <div class="content">
             <div class="input-block">
                 <div id="loader" hidden="hidden"></div>
+                <input id="url-result" type="text" hidden="hidden" disabled
+                       value="{% if object.pk %}{{ request.META.HTTP_HOST }}{% url 'mainapp:read' pk=object.pk %}{% endif %}">
+
                 <form action="{% url 'mainapp:index' %}" class="input-form" method="post" id="code_create_form">
                     {% csrf_token %}
                     {{ form }}

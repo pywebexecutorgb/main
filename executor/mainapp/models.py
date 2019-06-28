@@ -90,6 +90,12 @@ class CodeBase(models.Model):
         """
         self.hash_digest = sha3_512(self.code_text.encode('utf-8') +
                                     self.dependencies.encode('utf-8')).hexdigest()
+
+        is_code_exist = CodeBase.has_digest(self.hash_digest)
+        if is_code_exist:
+            self.id = is_code_exist.pk
+            return
+
         return super(CodeBase, self).save()
 
     @classmethod

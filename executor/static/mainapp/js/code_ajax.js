@@ -37,6 +37,7 @@ window.onload = () => { // после загрузки страницы наве
         event.target.innerText = event.target.dataset.defaultValue; // возвращаем исходный текст кнопки из шаблона
         event.target.disabled = false;
         document.getElementById('loader').hidden = true;
+
         outputResult.value = response['output']; // выводим результат выполнения кода
 
         if (response['has_errors']) { // если вернулся код с ошибками
