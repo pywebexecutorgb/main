@@ -45,3 +45,7 @@ class PyWebUserLoginForm(AuthenticationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
+
+
+# class PasswordResetForm(PasswordResetForm):
+#     pass

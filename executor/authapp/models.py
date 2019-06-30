@@ -43,5 +43,5 @@ class UserCode(models.Model):
         verbose_name = "User's Code"
         verbose_name_plural = "User's Codes"
 
-    users = models.ManyToManyField(PyWebUser)
-    codes = models.ManyToManyField(CodeBase)
+    user_id = models.ForeignKey(PyWebUser, on_delete=models.CASCADE)
+    code_id = models.ForeignKey(CodeBase, on_delete=models.CASCADE)
