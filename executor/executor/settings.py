@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +25,7 @@ SECRET_KEY = '*1&g2_wug-u7$32pb=j6g275gyhb01h^0e3_1*w@6j&wvz^*-i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api.apps.ApiConfig',
     'mainapp.apps.MainappConfig',
+    'authapp.apps.AuthappConfig',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +117,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 if DEBUG:
     INTERNAL_IPS = ['127.0.0.1', '::1']
     INSTALLED_APPS.extend(['debug_toolbar',
@@ -144,3 +149,13 @@ if DEBUG:
     ]
 
 DOCKERFILE_TEMPLATE = os.path.join(BASE_DIR, 'mainapp', 'templates', 'Dockerfile.j2')
+
+AUTH_USER_MODEL = 'authapp.PyWebUser'
+
+# TODO: this settings must be changed before production
+DOMAIN_NAME = 'http://localhost:8000'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'geekshop@list.ru'
+EMAIL_HOST_PASSWORD = 'djangopassword'
+EMAIL_USE_SSL = True

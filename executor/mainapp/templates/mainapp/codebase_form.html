@@ -18,6 +18,15 @@
 <div class="container">
     <header>
         Header: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, nam.
+
+        {% if user.is_authenticated %}
+            <a class="menu-auth-link" href="{% url 'authapp:update' %}">update</a>
+            <a class="menu-auth-link" href="{% url 'authapp:logout' %}">logout</a>
+        {% else %}
+            <a class="menu-auth-link" href="{% url 'authapp:register' %}">register</a>
+            <a class="menu-auth-link" href="{% url 'authapp:login' %}">login</a>
+        {% endif %}
+
     </header>
     <div class="top">
         <div class="content">
