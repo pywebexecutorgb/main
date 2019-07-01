@@ -6,3 +6,4 @@ Jinja2==2.10.1
 docker==4.0.1
 short-url==1.2.2
 Pillow==6.0.0
+djangorestframework

@@ -1,10 +1,10 @@
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, CreateView
 
 from mainapp.forms import CodeBaseForm
-from mainapp.models import CodeBase, CodeExecution
+from mainapp.models import CodeBase
 
 
 class CodeCreate(CreateView):
@@ -37,6 +37,7 @@ class CodeRead(DetailView):
         context.update({'form': form})
 
         return context
+
 
 def code_read_ajax(request, pk):
     if request.is_ajax():
