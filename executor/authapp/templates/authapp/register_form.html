@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ page_title }}</title>
+
+    <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="auth-form-name">Register form</div>
+    <form class = "form-horizontal" action = "{% url 'authapp:register' %}" method = "post" enctype = "multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>
+    <input class = "btn btn-success form-control" type = "submit" value = "register">
+    <a href="{% url 'mainapp:index' %}" class="btn btn-primary form-control form-control-back-to">back to main page</a>
+    </form>
+
+<script src="{% static 'mainapp/js/main.js' %}"></script>
+<script src="{% static 'mainapp/js/code_ajax.js' %}"></script>
+</body>
+</html>

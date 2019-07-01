@@ -22,6 +22,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('mainapp:index'),
                                   permanent=False)),
     path('code/', include('mainapp.urls', namespace='mainapp')),
+    path('auth/', include('authapp.urls', namespace='authapp')),
 
     path('admin/', admin.site.urls),
 ]
