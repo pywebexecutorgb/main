@@ -64,7 +64,8 @@ header, footer {
 
 .buttons {
     display: flex;
-    justify-content: space-around;
+    /* justify-content: space-around; */
+    justify-content: space-between;
 }
 
 .run-button,
@@ -75,6 +76,20 @@ header, footer {
 
 .error-message {
     color: darkred;
+}
+
+.blinking {
+    animation: 1s infinite linear blink;
+}
+
+@keyframes blink {
+    0% {
+        color: black;
+    }
+    50% {
+        color: transparent;
+    }
+
 }
 
 #loader {

@@ -23,8 +23,9 @@
         <div class="content">
             <div class="input-block">
                 <div id="loader" hidden="hidden"></div>
-                <input id="url-result" type="text" hidden="hidden" disabled
-                       value="{% if object.pk %}{{ request.META.HTTP_HOST }}{% url 'mainapp:read' pk=object.pk %}{% endif %}">
+                <input id="url-result" type="text" hidden
+                       data-domain="{{ request.META.HTTP_HOST }}"
+                       data-location="{% if object.pk %}{{ object.url }}{% else %}{{ request.path }}{% endif %}">
 
                 <form action="{% url 'mainapp:index' %}" class="input-form" method="post" id="code_create_form">
                     {% csrf_token %}
@@ -35,6 +36,9 @@
                         </button>
                         <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">
                             Clear form
+                        </button>
+                        <button id="copy-button" class="clear-button btn btn-outline-secondary">
+                            Copy URL
                         </button>
                     </div>
                 </form>
