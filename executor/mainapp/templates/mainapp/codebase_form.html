@@ -24,7 +24,6 @@
             <div class="input-block">
                 <div id="loader" hidden="hidden"></div>
                 <input id="url-result" type="text" hidden
-                       data-domain="{{ request.META.HTTP_HOST }}"
                        data-location="{% if object.pk %}{{ object.url }}{% else %}{{ request.path }}{% endif %}">
 
                 <form action="{% url 'mainapp:index' %}" class="input-form" method="post" id="code_create_form">

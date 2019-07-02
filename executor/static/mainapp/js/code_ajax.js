@@ -50,6 +50,9 @@ window.addEventListener('load', () => { // после загрузки стра�
         // обновляем location результата
         let url = document.getElementById('url-result');
         url.dataset.location = response['code']['url'];
+
+        // update address bar
+        history.pushState('update URL', '',window.location.origin + url.dataset.location);
       }
     };
 

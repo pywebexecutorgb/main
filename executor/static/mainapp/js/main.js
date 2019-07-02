@@ -44,7 +44,7 @@ window.addEventListener('load', () => {
      */
     function copyURLToClipboard(event) {
       let url = document.getElementById('url-result');
-      url.value = url.dataset.domain + url.dataset.location;
+      url.value = window.location.origin + url.dataset.location;
       url.hidden = false;
       url.select();
       document.execCommand('copy');
