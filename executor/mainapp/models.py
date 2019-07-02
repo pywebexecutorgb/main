@@ -52,6 +52,7 @@ code_exec
 from hashlib import sha3_512
 
 from django.db import models
+from django.urls import reverse
 
 
 class CodeBase(models.Model):
@@ -82,6 +83,14 @@ class CodeBase(models.Model):
                 interpreter='{self.get_interpreter_display()}'
                 code='{self.code_text[:64]}'
                 dependencies='{self.dependencies}'"""
+
+    @property
+    def url(self):
+        """
+        Return short URL location to CodeBase object
+        :return location path: string
+        """
+        return reverse('mainapp:read', args=(self.pk,))
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         """

@@ -1,6 +1,6 @@
 'use strict';
 
-window.onload = () => { // после загрузки страницы навешиваем слушатель "клик"
+window.addEventListener('load', () => { // после загрузки страницы навешиваем слушатель "клик"
   document.querySelector('#execute_button').addEventListener('click', (event) => {
     event.preventDefault(); // отключаем стандартное действие кнопки
     event.target.dataset.defaultValue = event.target.innerText; // добавляем для кнопки описание по умолчанию
@@ -39,14 +39,22 @@ window.onload = () => { // после загрузки страницы наве
         document.getElementById('loader').hidden = true;
 
         outputResult.value = response['output']; // выводим результат выполнения кода
+        outputResult.classList.remove('blinking'); // удаляем эффект мигания курсора
 
         if (response['has_errors']) { // если вернулся код с ошибками
           outputResult.classList.add('error-message'); // меняем класс на ошибочный
         } else { // если вернулся код без ошибок
           outputResult.classList.remove('error-message'); // убираем ошибочный класс
         }
+
+        // обновляем location результата
+        let url = document.getElementById('url-result');
+        url.dataset.location = response['code']['url'];
+
+        // update address bar
+        history.pushState('update URL', '', window.location.origin + url.dataset.location);
       }
     };
 
   });
-}
+});

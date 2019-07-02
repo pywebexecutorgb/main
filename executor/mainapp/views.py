@@ -1,6 +1,4 @@
 from django.urls import reverse
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, CreateView
 
 from mainapp.forms import CodeBaseForm
@@ -38,9 +36,9 @@ class CodeRead(DetailView):
 
         return context
 
-
-def code_read_ajax(request, pk):
-    if request.is_ajax():
-        qs = get_object_or_404(CodeExecution, pk=pk)
-        return JsonResponse({'output': qs.output,
-                             'has_errors': qs.has_errors})
+# This logic migrated into REST API: api/views.py
+# def code_read_ajax(request, pk):
+#     if request.is_ajax():
+#         qs = get_object_or_404(CodeExecution, pk=pk)
+#         return JsonResponse({'output': qs.output,
+#                              'has_errors': qs.has_errors})

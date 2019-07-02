@@ -5,9 +5,11 @@ from mainapp.models import CodeBase, CodeExecution
 
 
 class CodeBaseSerializer(serializers.ModelSerializer):
+    url = serializers.ReadOnlyField()
+
     class Meta:
         model = CodeBase
-        fields = ('pk', 'code_text', 'dependencies', 'created_at')
+        fields = ('pk', 'code_text', 'dependencies', 'created_at', 'url')
         lookup_field = 'pk'
 
 
