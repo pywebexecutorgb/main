@@ -52,7 +52,7 @@ window.addEventListener('load', () => { // после загрузки стра�
         url.dataset.location = response['code']['url'];
 
         // update address bar
-        history.pushState('update URL', '',window.location.origin + url.dataset.location);
+        history.pushState('update URL', '', window.location.origin + url.dataset.location);
       }
     };
 
