@@ -1,5 +1,5 @@
 from mainapp.models import CodeBase, CodeExecution
-from mainapp.utils import DockerExec, convert_output_to_profile, runtime_container_exec
+from mainapp.utils import DockerExec, convert_output_to_profile, convert_error_to_profile, runtime_container_exec
 
 
 def execute_code(code_id=None):
@@ -36,7 +36,8 @@ def execute_runtime_code(container_id, code, dependencies):
     except Exception as err:
         exec_error = err
     if exec_error:
-        return {'has_errors': True, 'output': exec_error.decode('utf-8')}
+        (error, _) = convert_error_to_profile(exec_error.decode('utf-8'))
+        return {'has_errors': True, 'output': error}
 
     (output, profile) = convert_output_to_profile(exec_output.decode('utf-8'))
     return {'has_errors': False, 'output': output, 'profile': profile}

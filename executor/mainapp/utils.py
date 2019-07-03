@@ -63,6 +63,19 @@ def convert_output_to_profile(input=''):
             '\n'.join(profile))
 
 
+def convert_error_to_profile(input=''):
+    """
+    Function split input text on error text and profile result
+    :param input: string, input text
+    :return (error, profile output): string, string
+    """
+    if not input:
+        return ("string doesn't defined", None)
+    (profile, error) = input.split('\n\n\n')
+
+    return (error, profile)
+
+
 def prepare_docker_exec(python_interpreter='python3', script_data='', requirements_data=''):
     """
     Prepare working directory for running script with Dockerfile
