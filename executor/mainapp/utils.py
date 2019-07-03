@@ -71,8 +71,8 @@ def convert_error_to_profile(input=''):
     """
     if not input:
         return ("string doesn't defined", None)
-    (profile, error) = input.split('\n\n\n')
 
+    (profile, error) = input.rsplit('\n\n', 1)
     return (error, profile)
 
 
