@@ -1,7 +1,7 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from rest_framework import serializers
 
-from mainapp.models import CodeBase, CodeExecution
+from mainapp.models import CodeBase, CodeExecution, Container
 
 
 class CodeBaseSerializer(serializers.ModelSerializer):
@@ -19,3 +19,9 @@ class CodeExecutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CodeExecution
         fields = ('code', 'has_errors', 'output', 'profile', 'processed_at')
+
+
+class ContainerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Container
+        fields = ('container_id', 'created_at')

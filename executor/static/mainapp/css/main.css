@@ -69,8 +69,10 @@ header, footer {
 }
 
 .run-button,
-.clear-button {
-    width: 150px;
+.clear-button,
+.save-button,
+.copy-button {
+    width: 130px;
     margin-top: 10px;
 }
 

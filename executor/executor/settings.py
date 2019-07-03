@@ -149,6 +149,8 @@ if DEBUG:
     ]
 
 DOCKERFILE_TEMPLATE = os.path.join(BASE_DIR, 'mainapp', 'templates', 'Dockerfile.j2')
+DOCKERFILE_DIRECTORY = os.path.join(BASE_DIR, 'mainapp', 'templates')
+DOCKER_TEMPORARY_DIRECTORY = '/tmp'
 
 AUTH_USER_MODEL = 'authapp.PyWebUser'
 

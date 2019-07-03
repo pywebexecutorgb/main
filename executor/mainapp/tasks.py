@@ -1,5 +1,5 @@
 from mainapp.models import CodeBase, CodeExecution
-from mainapp.utils import DockerExec, convert_output_to_profile
+from mainapp.utils import DockerExec, convert_output_to_profile, runtime_container_exec
 
 
 def execute_code(code_id=None):
@@ -26,3 +26,17 @@ def execute_code(code_id=None):
     c_exec = CodeExecution(code=code, has_errors=False,
                            output=output, profile=profile)
     return c_exec.save()
+
+
+def execute_runtime_code(container_id, code, dependencies):
+    exec_output, exec_error = None, None
+    try:
+        result_object = runtime_container_exec(container_id, code, dependencies)
+        exec_output, exec_error = result_object.stdout, result_object.stderr
+    except Exception as err:
+        exec_error = err
+    if exec_error:
+        return {'has_errors': True, 'output': exec_error.decode('utf-8')}
+
+    (output, profile) = convert_output_to_profile(exec_output.decode('utf-8'))
+    return {'has_errors': False, 'output': output, 'profile': profile}

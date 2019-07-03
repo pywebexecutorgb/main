@@ -18,7 +18,12 @@ window.addEventListener('load', () => { // после загрузки стра�
 
 
     // отправляем AJAX-запрос
-    hReq.open('POST', '/api/code-base/', true);
+    let urlReq = '/api/code-bases/';
+    const containerID = sessionStorage.getItem('containerID');
+    if (containerID) {
+      urlReq = `/api/containers/${containerID}/codes/`;
+    }
+    hReq.open('POST', urlReq, true);
     hReq.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     hReq.send(data);
 
@@ -47,12 +52,16 @@ window.addEventListener('load', () => { // после загрузки стра�
           outputResult.classList.remove('error-message'); // убираем ошибочный класс
         }
 
+        if (!response['code'] || !response['code']['url']) {
+          return;
+        }
+
         // обновляем location результата
         let url = document.getElementById('url-result');
         url.dataset.location = response['code']['url'];
-
         // update address bar
         history.pushState('update URL', '', window.location.origin + url.dataset.location);
+
       }
     };
 

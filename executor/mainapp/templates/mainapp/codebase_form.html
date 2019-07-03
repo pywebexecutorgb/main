@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script async src="{% static 'mainapp/js/init.js' %}"></script>
 </head>
 <body>
 <div class="container">
@@ -45,6 +46,9 @@
                         <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">
                             Clear form
                         </button>
+                        <button id="save-button" class="clear-button btn btn-outline-secondary">
+                            Save
+                        </button>
                         <button id="copy-button" class="clear-button btn btn-outline-secondary">
                             Copy URL
                         </button>
@@ -67,8 +71,6 @@
         Footer: Lorem ipsum dolor sit amet.
     </footer>
 </div>
-{#<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>#}
-{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>#}
 <script src="{% static 'mainapp/js/main.js' %}"></script>
 <script src="{% static 'mainapp/js/code_ajax.js' %}"></script>
 </body>

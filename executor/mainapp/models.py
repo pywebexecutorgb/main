@@ -51,8 +51,11 @@ code_exec
 
 from hashlib import sha3_512
 
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
+
+from mainapp.utils import Docker
 
 
 class CodeBase(models.Model):
@@ -130,3 +133,20 @@ class CodeExecution(models.Model):
                 code='{self.code.code_text[:32]}',
                 has_errors='{self.has_errors}'
                 output='{self.output[:32]}'"""
+
+
+class Container(models.Model):
+    class Meta:
+        verbose_name = "Container information"
+        verbose_name_plural = "Containers information"
+
+    container_id = models.CharField(verbose_name='Container ID', max_length=128,
+                                    blank=True, default='', db_index=True)
+    created_at = models.DateTimeField(verbose_name='Created timestamp', auto_now_add=True)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        docker = Docker(settings.DOCKERFILE_DIRECTORY)
+        docker.run()
+
+        self.container_id = docker.container.container_id
+        return super(Container, self).save()
