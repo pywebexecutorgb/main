@@ -70,8 +70,10 @@ class ContainerSet(viewsets.ModelViewSet):
         datetime_value = datetime.fromtimestamp(request.data.get('date', 0) / (10 ** 3))
 
         queryset = Container.objects.filter(container_id=pk)
-        queryset.update(last_access_at=make_aware(datetime_value))
+        if not queryset:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
+        queryset.update(last_access_at=make_aware(datetime_value))
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
