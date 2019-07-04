@@ -10,7 +10,7 @@
     .result-block {
         all: unset !important;
         margin: 0 5px 0 5px;
-        /*height: 500px !important;*/
+        min-height: 400px !important;
     }
 
     .buttons {
@@ -21,11 +21,6 @@
     .btn {
         width: 48% !important;
         margin-right: unset !important;
-    }
-
-    .result-block {
-        min-height: 300px;
-        height: 100% !important;
     }
 }
 
