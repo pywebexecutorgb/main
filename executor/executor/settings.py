@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -148,7 +147,12 @@ if DEBUG:
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ]
 
+BROKER_URL = 'sqla+sqlite:///db.sqlite3'
+CELERY_RESULT_BACKEND = 'db+sqlite:///db.sqlite3'
+
 DOCKERFILE_TEMPLATE = os.path.join(BASE_DIR, 'mainapp', 'templates', 'Dockerfile.j2')
+DOCKERFILE_DIRECTORY = os.path.join(BASE_DIR, 'mainapp', 'templates')
+DOCKER_TEMPORARY_DIRECTORY = '/tmp'
 
 AUTH_USER_MODEL = 'authapp.PyWebUser'
 

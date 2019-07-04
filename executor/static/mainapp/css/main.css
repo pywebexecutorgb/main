@@ -1,3 +1,32 @@
+@media screen and (max-width: 770px) {
+    .content {
+        display: flex;
+        flex-direction: column;
+        height: unset !important;
+        min-height: 800px;
+    }
+
+    .input-block,
+    .result-block {
+        all: unset !important;
+        margin: 0 5px 0 5px;
+    }
+
+    .result-block {
+        height: 300px !important;
+    }
+
+    .buttons {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        width: 48% !important;
+        margin-right: unset !important;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -9,6 +38,7 @@ html, body {
 
 header, footer {
     margin: 5px 0 5px;
+    padding: 0 15px;
     height: 45px;
     background-color: lightgray;
     border-radius: 5px;
@@ -16,6 +46,19 @@ header, footer {
     line-height: 45px;
     text-align: center;
     text-transform: uppercase;
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+
+footer {
+    text-align: right;
 }
 
 .container {
@@ -32,6 +75,7 @@ header, footer {
 
 .content {
     display: flex;
+    height: 100%;
 }
 
 .input-block,
@@ -39,7 +83,7 @@ header, footer {
     position: relative;
     width: 50%;
     margin: 0 5px 0 5px;
-    height: 500px;
+    height: 600px;
 }
 
 .input-form,
@@ -68,10 +112,14 @@ header, footer {
     justify-content: space-between;
 }
 
-.run-button,
-.clear-button {
-    width: 150px;
+.btn {
+    width: 130px;
     margin-top: 10px;
+    margin-right: 5px;
+}
+
+.btn:last-child {
+    margin-right: 0;
 }
 
 .error-message {
