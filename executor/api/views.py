@@ -1,7 +1,10 @@
 # Create your views here.
+from datetime import datetime
+
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.timezone import make_aware
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -44,7 +47,7 @@ class CodeExecutionSet(viewsets.ModelViewSet):
 class ContainerSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()
     serializer_class = ContainerSerializer
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'post', 'put', 'delete']
 
     @action(detail=True, methods=['post'])
     def codes(self, request, pk):
@@ -62,6 +65,14 @@ class ContainerSet(viewsets.ModelViewSet):
         serializer = ContainerSerializer(data)
 
         return Response(serializer.data)
+
+    def update(self, request, pk):
+        datetime_value = datetime.fromtimestamp(request.data.get('date', 0) / (10 ** 3))
+
+        queryset = Container.objects.filter(container_id=pk)
+        queryset.update(last_access_at=make_aware(datetime_value))
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
         try:

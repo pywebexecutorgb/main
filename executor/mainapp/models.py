@@ -143,6 +143,7 @@ class Container(models.Model):
     container_id = models.CharField(verbose_name='Container ID', max_length=128,
                                     blank=True, default='', db_index=True)
     created_at = models.DateTimeField(verbose_name='Created timestamp', auto_now_add=True)
+    last_access_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         docker = Docker(settings.DOCKERFILE_DIRECTORY)

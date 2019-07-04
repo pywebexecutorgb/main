@@ -1,5 +1,8 @@
 'use strict';
 
+/*
+ * Initialize container on page load.
+ */
 window.addEventListener('DOMContentLoaded', () => {
   fetch('/api/containers/', {
     method: 'POST',
@@ -12,10 +15,17 @@ window.addEventListener('DOMContentLoaded', () => {
     .catch(() => console.log('cannot get Container ID'))
 });
 
-window.addEventListener('unload', () => {
+window.addEventListener('beforeunload', () => deleteContainer());
+window.addEventListener('unload', () => deleteContainer());
+
+/**
+ * Function make DELETE request, that remove container.
+ * Successful status code = 204.
+ */
+function deleteContainer() {
   let containerID = sessionStorage.getItem('containerID');
   if (containerID) {
-    fetch(`/api/containers/${containerID}`, {
+    fetch(`/api/containers/${containerID}/`, {
       method: 'DELETE',
     })
       .then(() => {
@@ -23,4 +33,23 @@ window.addEventListener('unload', () => {
       })
       .catch(() => console.log(`cannot remove container ${containerID}`))
   }
-});
+}
+
+window.addEventListener('load', () => sendHealthChecks());
+
+function sendHealthChecks() {
+  setInterval(() => {
+    let containerID = sessionStorage.getItem('containerID');
+    if (!containerID) {
+      return False;
+    }
+
+    fetch(`/api/containers/${containerID}/`, {
+      method: 'PUT',
+      headers: {
+      'Content-Type': 'application/json'
+    },
+      body: JSON.stringify({'date': Date.now()}),
+    });
+  }, 10000);
+}
