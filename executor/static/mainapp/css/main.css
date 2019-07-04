@@ -11,7 +11,6 @@
         all: unset !important;
         margin: 0 5px 0 5px;
         height: 400px !important;
-        min-height: 100%;
     }
 
     .buttons {
