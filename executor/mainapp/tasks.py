@@ -1,5 +1,25 @@
-from mainapp.models import CodeBase, CodeExecution
+from django.utils import timezone
+from datetime import timedelta
+
+import mainapp.utils
+from mainapp.models import CodeBase, CodeExecution, Container
 from mainapp.utils import DockerExec, convert_output_to_profile, convert_error_to_profile, runtime_container_exec
+
+from executor.celery import app
+
+
+@app.task
+def clean_containers():
+    time = timezone.now() - timedelta(minutes=15)
+    for container in Container.objects.filter(last_access_at__lte=time):
+        print(container)
+        try:
+            docker_container = mainapp.utils.Container()
+            docker_container.define(container.container_id)
+            docker_container.remove()
+        except Exception:
+            pass
+        container.delete()
 
 
 def execute_code(code_id=None):
