@@ -2,7 +2,7 @@
     .content {
         display: flex;
         flex-direction: column;
-        height: 100% !important;
+        height: unset !important;
         min-height: 800px;
     }
 
@@ -10,7 +10,10 @@
     .result-block {
         all: unset !important;
         margin: 0 5px 0 5px;
-        height: 400px !important;
+    }
+
+    .result-block {
+        height: 300px !important;
     }
 
     .buttons {
