@@ -67,6 +67,7 @@ window.addEventListener('load', () => {
       } else {
         outputResult.classList.add('error-message');
       }
+      outputResult.classList.remove('blinking');
 
       // update location result and address bar
       let url = document.getElementById('url-result');

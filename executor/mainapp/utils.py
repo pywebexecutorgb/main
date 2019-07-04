@@ -72,8 +72,11 @@ def convert_error_to_profile(input=''):
     if not input:
         return ("string doesn't defined", None)
 
-    (profile, error) = input.rsplit('\n\n', 1)
-    return (error, profile)
+    output = input.rsplit('\n\n', 1)
+    if len(output) > 1:
+        # default output equal (profile, error), make it reversed
+        return reversed(output[:2])
+    return (input, None)
 
 
 def prepare_docker_exec(python_interpreter='python3', script_data='', requirements_data=''):
