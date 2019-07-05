@@ -10,6 +10,10 @@ function showNotification(message) {
   notification.textContent = message;
 }
 
+function hideNotification() {
+  document.querySelector('.notification').hidden = true;
+}
+
 /*
  * Initialize container on page load.
  */
@@ -64,6 +68,7 @@ function sendHealthChecks() {
         if (response.status !== 204) {
           throw new Error('received wrong status code');
         }
+        hideNotification();
       })
       .catch(() => showNotification('Error while send container healthcheck, please refresh page'));
   }, 10000);
