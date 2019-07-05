@@ -1,13 +1,13 @@
-# Create your views here.
 from datetime import datetime
 
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.timezone import make_aware
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from api.serializers import CodeBaseSerializer, CodeExecutionSerializer, ContainerSerializer
 from mainapp.models import CodeBase, CodeExecution, Container
@@ -16,10 +16,10 @@ from mainapp.tasks import execute_runtime_code
 import mainapp.utils
 
 
-class CodeBaseSet(viewsets.ModelViewSet):
+class CodeBaseSet(mixins.CreateModelMixin, GenericViewSet):
     queryset = CodeBase.objects.all()
     serializer_class = CodeBaseSerializer
-    http_method_names = ['get', 'post']
+    # http_method_names = ['post']
 
     def create(self, request, *args, **kwargs):
         obj = super(CodeBaseSet, self).create(request, *args, **kwargs)
@@ -30,10 +30,10 @@ class CodeBaseSet(viewsets.ModelViewSet):
                                                         kwargs={'pk': obj.data.get('pk')}))
 
 
-class CodeExecutionSet(viewsets.ModelViewSet):
+class CodeExecutionSet(mixins.RetrieveModelMixin, GenericViewSet):
     queryset = CodeExecution.objects.all()
     serializer_class = CodeExecutionSerializer
-    http_method_names = ['get']
+    # http_method_names = ['get']
 
     def retrieve(self, request, pk):
         queryset = CodeExecution.objects.select_related('code').all()
@@ -48,6 +48,9 @@ class ContainerSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()
     serializer_class = ContainerSerializer
     http_method_names = ['get', 'post', 'put', 'delete']
+
+    def list(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
     @action(detail=True, methods=['post'])
     def codes(self, request, pk):
