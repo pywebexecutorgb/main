@@ -1,4 +1,4 @@
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 768px) {
     .content {
         display: flex;
         flex-direction: column;
@@ -33,6 +33,7 @@
 }
 
 html, body {
+    min-width: 300px;
     height: 100%;
 }
 
@@ -55,6 +56,12 @@ header {
     flex-direction: row;
     justify-content: space-between;
     padding: 0 15px;
+}
+
+.header-title:any-link {
+    display: block;
+    color: unset;
+    text-decoration: none;
 }
 
 footer {
