@@ -64,6 +64,7 @@
                               class="{% if codebase.codeexecution.has_errors %}error-message{% endif %}
                                      {% if not codebase.codeexecution.output %}blinking{% endif %}"
                               readonly>&#9646; {{ codebase.codeexecution.output }}</textarea>
+                    <div class="notification bg-danger" hidden="hidden"></div>
                 </div>
             </div>
         </div>

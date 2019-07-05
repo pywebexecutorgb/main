@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * Function enable notification block and show message.
+ * @param message: string
+ */
+function showNotification(message) {
+  let notification = document.querySelector('.notification');
+  notification.hidden = false;
+  notification.textContent = message;
+}
+
 /*
  * Initialize container on page load.
  */
@@ -12,10 +22,9 @@ window.addEventListener('DOMContentLoaded', () => {
   })
     .then(response => response.json())
     .then((json) => sessionStorage.setItem('containerID', json['container_id']))
-    .catch(() => console.log('cannot get Container ID'))
+    .catch(() => showNotification('Cannot get container ID, please refresh page'))
 });
 
-window.addEventListener('beforeunload', () => deleteContainer());
 window.addEventListener('unload', () => deleteContainer());
 
 /**
@@ -31,7 +40,7 @@ function deleteContainer() {
       .then(() => {
         console.log(`container ${containerID} has deleted`)
       })
-      .catch(() => console.log(`cannot remove container ${containerID}`))
+      .catch(() => console.log(`Cannot remove container ${containerID}`))
   }
 }
 
@@ -47,9 +56,15 @@ function sendHealthChecks() {
     fetch(`/api/containers/${containerID}/`, {
       method: 'PUT',
       headers: {
-      'Content-Type': 'application/json'
-    },
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({'date': Date.now()}),
-    });
+    })
+      .then((response) => {
+        if (response.status !== 204) {
+          throw new Error('received wrong status code');
+        }
+      })
+      .catch(() => showNotification('Error while send container healthcheck, please refresh page'));
   }, 10000);
 }
