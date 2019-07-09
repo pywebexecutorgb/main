@@ -24,4 +24,4 @@ class CodeExecutionSerializer(serializers.ModelSerializer):
 class ContainerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Container
-        fields = ('container_id', 'created_at')
+        fields = ('container_id', 'created_at', 'last_access_at')
