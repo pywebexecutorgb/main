@@ -18,7 +18,7 @@
 <body>
 <div class="container">
     <header>
-        <div class="header-title">Py Exec</div>
+        <a class="header-title" href="{% url 'mainapp:index' %}">Py Exec</a>
 
         <div class="header-menu">
             {% if user.is_authenticated %}
@@ -45,10 +45,10 @@
                         <button type="submit" class="run-button btn btn-outline-success" id="execute_button">
                             Execute code
                         </button>
-                        <button id="save-button" class="clear-button btn btn-outline-secondary">
+                        <button id="save-button" class="save-button btn btn-outline-secondary">
                             Save
                         </button>
-                        <button id="copy-button" class="clear-button btn btn-outline-secondary">
+                        <button id="copy-button" class="copy-button btn btn-outline-secondary">
                             Copy URL
                         </button>
                         <button type="reset" value="Reset" class="clear-button btn btn-outline-secondary">
@@ -64,6 +64,7 @@
                               class="{% if codebase.codeexecution.has_errors %}error-message{% endif %}
                                      {% if not codebase.codeexecution.output %}blinking{% endif %}"
                               readonly>&#9646; {{ codebase.codeexecution.output }}</textarea>
+                    <div class="notification bg-danger" hidden="hidden"></div>
                 </div>
             </div>
         </div>
