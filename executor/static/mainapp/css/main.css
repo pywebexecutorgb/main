@@ -27,7 +27,7 @@
     }
 
     .CodeMirror {
-        height: 300px !important;
+        height: 250px !important;
         border-radius: 3px;
         border: 1px solid lightgray;
         padding: 5px !important;
