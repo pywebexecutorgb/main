@@ -93,6 +93,13 @@ footer {
     height: 600px;
 }
 
+.CodeMirror {
+    height: 600px !important;
+    border-radius: 3px;
+    border: 1px solid lightgray;
+    padding: 5px !important;
+}
+
 .input-form,
 .result {
     height: 100%;
@@ -103,7 +110,14 @@ footer {
 
 #id_code_text,
 #output-result {
+    font-size: 0.9rem;
+    font-family: monospace;
     flex-grow: 1;
+}
+
+#id_dependencies {
+    font-size: 0.9rem;
+    font-family: monospace;
 }
 
 #output-result {

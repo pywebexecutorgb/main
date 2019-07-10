@@ -13,7 +13,11 @@
     <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'mainapp/css/codemirror.css' %}">
+
     <script async src="{% static 'mainapp/js/init.js' %}"></script>
+    <script defer src="{% static 'mainapp/js/codemirror/codemirror.js' %}"></script>
+    <script defer src="{% static 'mainapp/js/codemirror/python.js' %}" r></script>
 </head>
 <body>
 <div class="container">
@@ -74,6 +78,8 @@
         <a href="https://github.com/pywebexecutorgb">web executor</a> &copy;&nbsp;2019
     </footer>
 </div>
+
+<script src="{% static 'mainapp/js/init.js' %}"></script>
 <script src="{% static 'mainapp/js/main.js' %}"></script>
 <script src="{% static 'mainapp/js/code_ajax.js' %}"></script>
 </body>

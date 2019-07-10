@@ -1,9 +1,25 @@
 "use strict";
 
 window.addEventListener('load', () => {
+    let inputCMArea = null;
+    makeInputCodeHighlighting();
+
     clearButtonListener();
     saveButtonListener();
     copyButtonListener();
+
+    function makeInputCodeHighlighting() {
+      const inputCodeArea = document.getElementById('id_code_text');
+      inputCMArea = CodeMirror.fromTextArea(inputCodeArea, {
+        mode: {
+          name: "python",
+          version: 3,
+          singleLineStringErrors: false
+        },
+        indentUnit: 4,
+      });
+      inputCMArea.on("change", cm => inputCodeArea.textContent = cm.getValue());
+    }
 
     /**
      * Function setup empty values for text in forms by click "clear button"
@@ -19,6 +35,8 @@ window.addEventListener('load', () => {
        */
       function resetInputForm() {
         document.getElementById('id_code_text').textContent = '';
+        inputCMArea.setValue('');
+
         document.getElementById('id_dependencies').textContent = '';
       }
     }
