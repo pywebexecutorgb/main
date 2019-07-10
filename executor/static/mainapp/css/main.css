@@ -25,6 +25,22 @@
         width: 48% !important;
         margin-right: unset !important;
     }
+
+    .CodeMirror {
+        height: 350px !important;
+        border-radius: 3px;
+        border: 1px solid lightgray;
+        padding: 5px !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .CodeMirror {
+        height: 600px !important;
+        border-radius: 3px;
+        border: 1px solid lightgray;
+        padding: 5px !important;
+    }
 }
 
 * {
@@ -91,13 +107,6 @@ footer {
     width: 50%;
     margin: 0 5px 0 5px;
     height: 600px;
-}
-
-.CodeMirror {
-    height: 600px !important;
-    border-radius: 3px;
-    border: 1px solid lightgray;
-    padding: 5px !important;
 }
 
 .input-form,
