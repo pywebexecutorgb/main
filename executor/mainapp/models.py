@@ -55,7 +55,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
-from mainapp.utils import Docker
+from mainapp.utils import ShortURL, Docker
 
 
 class CodeBase(models.Model):
@@ -93,7 +93,7 @@ class CodeBase(models.Model):
         Return short URL location to CodeBase object
         :return location path: string
         """
-        return reverse('mainapp:read', args=(self.pk,))
+        return reverse('short_link', args=(ShortURL().encode(self.pk),))
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         """
