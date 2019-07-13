@@ -38,6 +38,8 @@ window.addEventListener('load', () => { // после загрузки стра�
         // складываем рабочие объекты в переменные для удобства работы
         const outputResult = document.querySelector('#output-result');
         const response = JSON.parse(hReq.response);
+        sessionStorage.setItem('latestProfile', response['profile']);
+        sessionStorage.setItem('latestOutput', response['output']);
 
         event.target.innerText = event.target.dataset.defaultValue; // возвращаем исходный текст кнопки из шаблона
         event.target.disabled = false;
@@ -45,6 +47,11 @@ window.addEventListener('load', () => { // после загрузки стра�
 
         outputResult.value = response['output']; // выводим результат выполнения кода
         outputResult.classList.remove('blinking'); // удаляем эффект мигания курсора
+
+        // если есть профайл, делмаем активной кнопку и выставляем ей значение по умолчанию
+        const viewButton = document.getElementById("view-button");
+        viewButton.hidden = !response.hasOwnProperty('profile');
+        viewButton.textContent = 'Profile';
 
         if (response['has_errors']) { // если вернулся код с ошибками
           outputResult.classList.add('error-message'); // меняем класс на ошибочный

@@ -151,6 +151,18 @@ footer {
     padding: 0 5px;
 }
 
+.view-button {
+    position: absolute;
+    z-index: 1;
+    bottom: 10px;
+    right: 10px;
+
+    opacity: 0.95;
+}
+.view-button:hover {
+    opacity: 1;
+}
+
 @keyframes blink {
     0% {
         color: black;

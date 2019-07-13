@@ -4,6 +4,7 @@ window.addEventListener('load', () => {
     clearButtonListener();
     saveButtonListener();
     copyButtonListener();
+    viewButtonListener();
 
     /**
      * Function setup empty values for text in forms by click "clear button"
@@ -127,6 +128,29 @@ window.addEventListener('load', () => {
           event.target.textContent = event.target.dataset.defaultValue;
           event.target.disabled = false;
         }, 2000);
+      }
+    }
+
+    function viewButtonListener() {
+      let btn = document.querySelector('.view-button');
+      btn.addEventListener('click', (event) => {
+        switchView(event);
+      });
+    }
+
+    function switchView(event) {
+      event.preventDefault();
+      const resultArea = document.querySelector('#output-result');
+
+      switch (event.target.textContent) {
+        case 'Profile':
+          event.target.textContent = 'Output';
+          resultArea.value = sessionStorage.getItem('latestProfile');
+          break;
+        case 'Output':
+          event.target.textContent = 'Profile';
+          resultArea.value = sessionStorage.getItem('latestOutput');
+          break;
       }
     }
   }
