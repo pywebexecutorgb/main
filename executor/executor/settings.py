@@ -164,3 +164,5 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'geekshop@list.ru'
 EMAIL_HOST_PASSWORD = 'djangopassword'
 EMAIL_USE_SSL = True
+
+LOGIN_URL = '/auth/login/'
