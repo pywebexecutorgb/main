@@ -51,10 +51,12 @@ class UserLogout(LoginRequiredMixin, LogoutView):
     extra_context = {'page_title': 'Logout | Python webExecutor'}
 
 
-def send_verify_email(user):
-    subject = f'Please activate your account on {settings.DOMAIN_NAME}'
+def send_verify_email(request, user):
+    domain = request.get_host()
+    subject = f"Please activate your account on {domain}"
     message = render_to_string('authapp/email_verification_email.html', {
-        'domain': settings.DOMAIN_NAME,
+        'protocol': 'https' if request.is_secure() else 'http',
+        'domain': domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': TokenGenerator().make_token(user),
     })
