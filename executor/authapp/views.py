@@ -19,7 +19,7 @@ class UserCreate(CreateView):
     model = PyWebUser
     form_class = PyWebUserRegisterForm
     template_name = 'authapp/register_form.html'
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
     extra_context = {'page_title': 'Register | Python webExecutor'}
 
     def form_valid(self, form):
@@ -33,7 +33,7 @@ class UserUpdate(LoginRequiredMixin, FormView):
     model = PyWebUser
     form_class = PyWebUserUpdateForm
     template_name = 'authapp/update_form.html'
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
     extra_context = {'page_title': 'Profile | Python webExecutor'}
 
 
@@ -43,11 +43,11 @@ class UserLogin(LoginView):
     extra_context = {'page_title': 'Login | Python webExecutor'}
 
     def get_redirect_url(self):
-        return reverse_lazy('mainapp:index')
+        return reverse_lazy('index')
 
 
 class UserLogout(LoginRequiredMixin, LogoutView):
-    next_page = reverse_lazy('mainapp:index')
+    next_page = reverse_lazy('index')
     extra_context = {'page_title': 'Logout | Python webExecutor'}
 
 
