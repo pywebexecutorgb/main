@@ -74,7 +74,7 @@ const codeBlock = {
       getJSON(url, params = {}) {
         return fetch(url, params)
           .then(response => response.json())
-          .catch(error => console.log(error))
+          .catch(error => this.$refs.error.setMessage(`Cannot fetch JSON: ${error.message}`))
       },
 
       /**
@@ -88,6 +88,7 @@ const codeBlock = {
         })
           .then(data => sessionStorage.setItem('containerID', data['container_id']));
       },
+
       /**
        * Remove container on beforeunload action.
        */
