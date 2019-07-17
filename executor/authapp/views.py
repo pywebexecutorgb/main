@@ -14,6 +14,8 @@ from authapp.tokens import TokenGenerator
 from authapp.models import PyWebUser
 from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm
 
+from django.http import JsonResponse
+
 
 class UserCreate(CreateView):
     model = PyWebUser
@@ -25,7 +27,7 @@ class UserCreate(CreateView):
     def form_valid(self, form):
         form.instance.is_active = False
         self.object = form.save()
-        send_verify_email(self.object)
+        send_verify_email(self.request, self.object)
         return super().form_valid(form)
 
 
@@ -40,10 +42,16 @@ class UserUpdate(LoginRequiredMixin, FormView):
 class UserLogin(LoginView):
     form_class = PyWebUserLoginForm
     template_name = 'authapp/login_form.html'
-    extra_context = {'page_title': 'Login | Python webExecutor'}
 
     def get_redirect_url(self):
         return reverse_lazy('mainapp:index')
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            result = render_to_string('authapp/login_form.html', context)
+            return JsonResponse({'result': result}, safe=False, **response_kwargs)
+        else:
+            return super().render_to_response(context, **response_kwargs)
 
 
 class UserLogout(LoginRequiredMixin, LogoutView):

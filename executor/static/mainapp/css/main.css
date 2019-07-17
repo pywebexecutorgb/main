@@ -44,9 +44,7 @@ header, footer {
     background-color: lightgray;
     border-radius: 5px;
 
-    line-height: 45px;
-    text-align: center;
-    text-transform: uppercase;
+    align-items: center;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -62,10 +60,14 @@ header {
     display: block;
     color: unset;
     text-decoration: none;
+    text-transform: uppercase;
 }
 
 footer {
     text-align: right;
+
+    line-height: 45px;
+    text-transform: uppercase;
 }
 
 .container {
@@ -183,4 +185,19 @@ footer {
     to {
         transform: rotate(360deg);
     }
+}
+
+.sign-in-link {
+    display: block;
+    height: 45px;
+    line-height: 45px;
+}
+
+.sign-in-link:hover {
+    text-decoration: none;
+}
+
+.invalid {
+    color: #dc3545;
+    font-size: 80%;
 }
