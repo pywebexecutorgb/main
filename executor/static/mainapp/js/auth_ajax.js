@@ -1,11 +1,12 @@
 window.onload = function () {
     let loginForm = $('.login-form');
+    let loginFields = $('.login-fields');
 
     $('.dropdown-toggle').on('click', function (event) {
         $.ajax({
             url: loginForm.attr('action'),
             success: function (data) {
-                $('.login-fields').html(data.result);
+                loginFields.html(data.result);
             },
         });
         event.preventDefault();
@@ -17,7 +18,7 @@ window.onload = function () {
             type: loginForm.attr('method'),
             url: loginForm.attr('action'),
             success: function (data) {
-                $('.login-fields').html(data.result);
+                loginFields.html(data.result);
                 if ($(data.result).find('.invalid').length === 0) {
                     $('.header-menu').load(" .header-menu");
                 }
@@ -27,13 +28,14 @@ window.onload = function () {
     });
 
     let signupForm = $('.signup-form');
-    let formFields = $('.signup-fields');
+    let signupFields = $('.signup-fields');
 
     $('.dropdown-signup').on('click', function (event) {
+        $('#signupModalScrollable').modal('show');
         $.ajax({
             url: signupForm.attr('action'),
             success: function (data) {
-                formFields.html(data.result);
+                signupFields.html(data.result);
             },
         });
         event.preventDefault();
@@ -45,10 +47,45 @@ window.onload = function () {
             type: signupForm.attr('method'),
             url: signupForm.attr('action'),
             success: function (data) {
-                formFields.html(data.result);
+                signupFields.html(data.result);
                 if ($(data.result).find('.invalid').length === 0) {
-                    formFields.html('Please check your email for complete the sign up');
+                    signupFields.hide();
+                    $('.modal-body-text').show();
                     $('.signup-btn').hide();
+                }
+            },
+        });
+        event.preventDefault();
+    });
+
+    let forgotForm = $('.forgot-form');
+    let forgotFields = $('.forgot-fields');
+
+    $('.dropdown-forgot').on('click', function (event) {
+        $('#forgotModalScrollable').modal('show');
+        $('.modal-body-text').hide();
+        // $('#forgotModalScrollable').show();
+        $.ajax({
+            url: forgotForm.attr('action'),
+            success: function (data) {
+                forgotFields.html(data.result);
+            },
+        });
+        event.preventDefault();
+    });
+
+    forgotForm.submit(function (event) {
+        $.ajax({
+            data: forgotForm.serialize(),
+            type: forgotForm.attr('method'),
+            url: forgotForm.attr('action'),
+            success: function (data) {
+                forgotFields.html(data.result);
+                if ($(data.result).find('.invalid').length === 0) {
+                    $('.modal-body-title').hide();
+                    $('.modal-body-text').show();
+                    forgotFields.hide();
+                    $('.forgot-btn').hide();
                 }
             },
         });

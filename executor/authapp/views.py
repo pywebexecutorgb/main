@@ -12,7 +12,7 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, 
 from executor import settings
 from authapp.tokens import TokenGenerator
 from authapp.models import PyWebUser
-from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm
+from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm, UserPasswordResetForm
 
 from django.http import JsonResponse
 
@@ -108,11 +108,18 @@ class UserPasswordChangeDone(PasswordChangeDoneView):
 
 
 class UserPasswordReset(PasswordResetView):
-    template_name = 'authapp/password_reset_form.html'
+    template_name = 'authapp/login_form.html'
     email_template_name = 'authapp/password_reset_email.html'
-    success_url = reverse_lazy('authapp:password_reset_done')
+    success_url = reverse_lazy('mainapp:index')
     from_email = settings.EMAIL_HOST_USER
-    extra_context = {'page_title': 'Password change | Python webExecutor'}
+    form_class = UserPasswordResetForm
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            result = render_to_string('authapp/login_form.html', context)
+            return JsonResponse({'result': result}, safe=False, **response_kwargs)
+        else:
+            return super().render_to_response(context, **response_kwargs)
 
 
 class UserPasswordResetDone(PasswordResetDoneView):

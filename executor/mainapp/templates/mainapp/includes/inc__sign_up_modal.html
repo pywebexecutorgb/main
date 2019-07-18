@@ -1,7 +1,6 @@
 <form class="signup-form px-4" action="{% url 'authapp:register' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-
-    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+    {% csrf_token %}
+    <div class="modal fade" id="signupModalScrollable" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
@@ -12,6 +11,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <p class="modal-body-text">Please check your email for complete the sign up</p>
                         <div class="signup-fields"></div>
                     </div>
                     <div class="modal-footer">
