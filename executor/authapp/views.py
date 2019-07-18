@@ -20,15 +20,22 @@ from django.http import JsonResponse
 class UserCreate(CreateView):
     model = PyWebUser
     form_class = PyWebUserRegisterForm
-    template_name = 'authapp/register_form.html'
+    template_name = 'authapp/login_form.html'
     success_url = reverse_lazy('mainapp:index')
-    extra_context = {'page_title': 'Register | Python webExecutor'}
+    # extra_context = {'page_title': 'Register | Python webExecutor'}
 
     def form_valid(self, form):
         form.instance.is_active = False
         self.object = form.save()
         send_verify_email(self.request, self.object)
         return super().form_valid(form)
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            result = render_to_string('authapp/login_form.html', context)
+            return JsonResponse({'result': result}, safe=False, **response_kwargs)
+        else:
+            return super().render_to_response(context, **response_kwargs)
 
 
 class UserUpdate(LoginRequiredMixin, FormView):

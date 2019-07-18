@@ -5,7 +5,7 @@ from authapp.models import PyWebUser
 class PyWebUserRegisterForm(UserCreationForm):
     class Meta:
         model = PyWebUser
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'email', 'userphoto')
+        fields = ('username', 'first_name', 'password1', 'password2', 'email')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
