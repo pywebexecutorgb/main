@@ -6,6 +6,14 @@ const inputCodeBlock = {
       code: '',
       requirements: '',
       url: null,
+      cmOption: {
+        mode: {
+          name: "python",
+          version: 3,
+          singleLineStringErrors: false
+        },
+        indentUnit: 4,
+      },
     };
   },
 
@@ -16,8 +24,9 @@ const inputCodeBlock = {
 
             <div id="code_create_form" class="input-form" >
                 <label for="id_code_text">Code text:</label>
-                <textarea id="id_code_text" name="code_text" class="form-control"
-                           v-model="code" cols="40" rows="10"  maxlength="2048" required=""></textarea>
+                <codemirror id="id_code_text" name="code_text" maxlength="2048" required=""
+                            v-model="code" :options="cmOption"></codemirror>
+
                 <label for="id_dependencies">Requirements.txt:</label>
                 <textarea id="id_dependencies" name="dependencies" class="form-control"
                           v-model="requirements" cols="40" rows="3" maxlength="256"></textarea>
@@ -160,5 +169,9 @@ const inputCodeBlock = {
         event.target.disabled = false;
       }, 2000);
     },
+  },
+
+  created() {
+    Vue.use(VueCodemirror);
   },
 };

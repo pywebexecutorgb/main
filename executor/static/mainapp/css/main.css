@@ -25,6 +25,22 @@
         width: 48% !important;
         margin-right: unset !important;
     }
+
+    .CodeMirror {
+        height: 250px !important;
+        border-radius: 3px;
+        border: 1px solid lightgray;
+        padding: 5px !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .CodeMirror {
+        min-height: 100%;
+        border-radius: 3px;
+        border: 1px solid lightgray;
+        padding: 5px !important;
+    }
 }
 
 * {
@@ -112,6 +128,13 @@ footer {
 #id_code_text,
 #output-result {
     flex-grow: 1;
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+#id_dependencies {
+    font-size: 0.9rem;
+    font-family: monospace;
 }
 
 #output-result {
