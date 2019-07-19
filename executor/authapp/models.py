@@ -21,7 +21,7 @@ class PyWebUser(AbstractUser):
         (FEMALE, 'Female'),
     )
 
-    email = models.EmailField(verbose_name='email', blank=True, unique=True)
+    email = models.EmailField(verbose_name='email', unique=True)
     userphoto = models.ImageField(verbose_name='userphoto', blank=True)
     age = models.PositiveIntegerField(verbose_name='age', null=True)
     gender = models.CharField(verbose_name='gender', max_length=1, choices=GENDER_CHOICES, blank=True)

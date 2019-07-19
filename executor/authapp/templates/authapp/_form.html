@@ -11,6 +11,7 @@
             <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
             {{ field }}
             <div class="{% if field.errors %} invalid{% endif %}">
+{#            <div class="{% if field.errors %} invalid{% endif %}">#}
                 {% for error in field.errors %}
                     <p class="help-block">{{ error }}</p>
                 {% endfor %}

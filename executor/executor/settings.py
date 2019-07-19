@@ -157,7 +157,7 @@ DOCKER_TEMPORARY_DIRECTORY = '/tmp'
 
 AUTH_USER_MODEL = 'authapp.PyWebUser'
 
-# TODO: this settings must be changed before production
+# TODO: this settings must be changed before production. SMTP server is refusing some email addresses and it gives 500 error
 DOMAIN_NAME = 'http://localhost:8000'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
