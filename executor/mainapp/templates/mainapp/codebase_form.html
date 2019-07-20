@@ -18,11 +18,18 @@
 <body>
 <div class="container">
 
-    {% include 'mainapp/includes/inc__sign_up_modal.html' %}
+    <div class="modals">
+        {% include 'mainapp/includes/inc__sign_up_modal.html' %}
 
-    {% include 'mainapp/includes/inc__forgot_password_modal.html' %}
+        {% include 'mainapp/includes/inc__forgot_password_modal.html' %}
+
+        {% if user.is_authenticated %}
+            {% include 'mainapp/includes/inc__update_user_modal.html' %}
+        {% endif %}
+    </div>
 
     {% include 'mainapp/includes/inc__header.html' %}
+
 
     <div class="top">
         <div class="content">

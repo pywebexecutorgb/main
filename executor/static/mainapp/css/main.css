@@ -187,13 +187,13 @@ footer {
     }
 }
 
-.sign-in-link {
+.dropdown-link {
     display: block;
     height: 45px;
     line-height: 45px;
 }
 
-.sign-in-link:hover {
+.dropdown-link:hover {
     text-decoration: none;
 }
 
@@ -202,6 +202,38 @@ footer {
     font-size: 80%;
 }
 
-/*.required {*/
-/*    font-size: 80%;*/
-/*}*/
+.dropdown-user-profile {
+    display: flex;
+    padding: 4px 24px;
+    text-decoration: none;
+    color: #2C2C2C;
+    width: 100%;
+    background-color: #f8f9fa;
+}
+
+.dropdown-user-profile:hover {
+    background-color: #e8e9ea;
+    text-decoration: none;
+    color: #2C2C2C;
+}
+
+.user-photo {
+    min-width: 70px;
+    min-height: 70px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.user-bio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.email {
+    word-break: break-word;
+}

@@ -5,7 +5,7 @@ app_name = 'authapp'
 
 urlpatterns = [
     path('register/', views.UserCreate.as_view(), name='register'),
-    path('update/', views.UserUpdate.as_view(), name='update'),
+    path('update/<int:pk>/', views.UserUpdate.as_view(), name='update'),
     path('login/', views.UserLogin.as_view(), name='login'),
     path('logout/', views.UserLogout.as_view(), name='logout'),
 

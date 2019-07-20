@@ -6,6 +6,7 @@ for creating a superuser, run the commands via 'python manage.py shell':
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from mainapp.models import CodeBase
 
 
@@ -22,8 +23,9 @@ class PyWebUser(AbstractUser):
     )
 
     email = models.EmailField(verbose_name='email', unique=True)
-    userphoto = models.ImageField(verbose_name='userphoto', blank=True)
-    age = models.PositiveIntegerField(verbose_name='age', null=True)
+    userphoto = models.ImageField(upload_to='userphotos', blank=True)
+    age = models.PositiveIntegerField(verbose_name='age', null=True, blank=True, validators=[MaxValueValidator(100),
+                                                                                             MinValueValidator(1)])
     gender = models.CharField(verbose_name='gender', max_length=1, choices=GENDER_CHOICES, blank=True)
     country = models.CharField(verbose_name='country', max_length=128, blank=True)
     state = models.CharField(verbose_name='state', max_length=128, blank=True)

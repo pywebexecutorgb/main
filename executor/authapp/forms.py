@@ -15,10 +15,14 @@ class PyWebUserRegisterForm(UserCreationForm):
 
 
 class PyWebUserUpdateForm(UserChangeForm):
+    password = None
+
     class Meta:
         model = PyWebUser
         fields = (
             'email',
+            'first_name',
+            'last_name',
             'userphoto',
             'age',
             'gender',

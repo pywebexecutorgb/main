@@ -6,7 +6,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.core.mail import send_mail
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, \
     PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
 from executor import settings
@@ -37,12 +37,18 @@ class UserCreate(CreateView):
             return super().render_to_response(context, **response_kwargs)
 
 
-class UserUpdate(LoginRequiredMixin, FormView):
+class UserUpdate(LoginRequiredMixin, UpdateView):
     model = PyWebUser
     form_class = PyWebUserUpdateForm
-    template_name = 'authapp/update_form.html'
+    template_name = 'authapp/_form.html'
     success_url = reverse_lazy('mainapp:index')
-    extra_context = {'page_title': 'Profile | Python webExecutor'}
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            result = render_to_string('authapp/_form.html', context)
+            return JsonResponse({'result': result}, safe=False, **response_kwargs)
+        else:
+            return super().render_to_response(context, **response_kwargs)
 
 
 class UserLogin(LoginView):

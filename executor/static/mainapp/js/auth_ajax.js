@@ -5,16 +5,27 @@ window.onload = function () {
     let loginForm = $('.login-form');
     let loginFields = $('.login-fields');
 
-    $('.dropdown-toggle').on('click', function (event) {
+    $('.header-menu').on('click', '.dropdown-toggle', function (event) {
         $.ajax({
             url: loginForm.attr('action'),
             success: function (data) {
                 loginFields.html(data.result);
-                signupForm.removeClass('was-validated');
+                loginForm.removeClass('was-validated');
             },
         });
         event.preventDefault();
     });
+
+    // $('.dropdown-toggle').on('click', function (event) {
+    //     $.ajax({
+    //         url: loginForm.attr('action'),
+    //         success: function (data) {
+    //             loginFields.html(data.result);
+    //             loginForm.removeClass('was-validated');
+    //         },
+    //     });
+    //     event.preventDefault();
+    // });
 
     loginForm.submit(function (event) {
         $('.invalid').remove();
@@ -25,9 +36,13 @@ window.onload = function () {
             url: loginForm.attr('action'),
             success: function (data) {
                 loginFields.html(data.result);
-                loginForm.addClass('was-validated');
                 if ($(data.result).find('.invalid').length === 0) {
-                    $('.header-menu').load(" .header-menu");
+                    // $('.dropdown').load(" .dropdown-link");
+                    // $('.header-menu').load(" .header-menu>*", "");
+                    $('.dropdown').load(" .dropdown>*", "");
+                    $('.modals').load(" .modals", "");
+                } else {
+                    loginForm.addClass('was-validated');
                 }
             },
         });
@@ -63,11 +78,12 @@ window.onload = function () {
             url: signupForm.attr('action'),
             success: function (data) {
                 signupFields.html(data.result);
-                signupForm.addClass('was-validated');
                 if ($(data.result).find('.invalid').length === 0) {
                     signupFields.hide();
                     $('.modal-body-text').show();
                     $('.signup-btn').hide();
+                } else {
+                    signupForm.addClass('was-validated');
                 }
             },
         });
@@ -105,12 +121,52 @@ window.onload = function () {
             url: forgotForm.attr('action'),
             success: function (data) {
                 forgotFields.html(data.result);
-                forgotForm.addClass('was-validated');
                 if ($(data.result).find('.invalid').length === 0) {
                     $('.modal-body-title').hide();
                     $('.modal-body-text').show();
                     forgotFields.hide();
                     $('.forgot-btn').hide();
+                } else {
+                    forgotForm.addClass('was-validated');
+                }
+            },
+        });
+        event.preventDefault();
+    });
+
+    // logic for update user form
+
+    $('.header-menu').on('click', '.dropdown-user-profile', function (event) {
+        $('#updateUserModalScrollable').modal('show');
+        $.ajax({
+            url: $('.dropdown-user-profile').attr('href'),
+            success: function (data) {
+                $('.update-user-fields').html(data.result);
+                $('.update-user-form').removeClass('was-validated');
+            },
+        });
+        event.preventDefault();
+    });
+
+    $('.modals').submit('.update-user-form', function (event) {
+        let updateUserForm = $('.update-user-form');
+        let updateUserFields = $('.update-user-fields');
+        $('.invalid').remove();
+        updateUserForm.removeClass('was-validated');
+        $.ajax({
+            data: new FormData(updateUserForm.get(0)),
+            type: updateUserForm.attr('method'),
+            url: updateUserForm.attr('action'),
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                updateUserFields.html(data.result);
+                if ($(data.result).find('.invalid').length === 0) {
+                    $('#updateUserModalScrollable').modal('hide');
+                    $('.dropdown-user-profile').load(" .dropdown-user-profile>*", "");
+                } else {
+                    updateUserForm.addClass('was-validated');
                 }
             },
         });
