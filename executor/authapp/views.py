@@ -12,9 +12,13 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, 
 from executor import settings
 from authapp.tokens import TokenGenerator
 from authapp.models import PyWebUser
-from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm, UserPasswordResetForm
+from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm, UserPasswordResetForm, \
+    UserSetPasswordForm
 
 from django.http import JsonResponse
+
+
+# TODO: .addClass('was-validated') маркирует невалидное поле age зеленым. Пофиксить
 
 
 class UserCreate(CreateView):
@@ -134,8 +138,9 @@ class UserPasswordResetDone(PasswordResetDoneView):
 
 class UserPasswordResetConfirm(PasswordResetConfirmView):
     template_name = 'authapp/password_reset_confirm.html'
-    success_url = reverse_lazy('authapp:password_reset_complete')
-    extra_context = {'page_title': 'Password reset confirmation | Python webExecutor'}
+    form_class = UserSetPasswordForm
+    success_url = reverse_lazy('mainapp:index')
+    extra_context = {'page_title': 'Password change | Python webExecutor'}
 
 
 class UserPasswordResetComplete(PasswordResetCompleteView):

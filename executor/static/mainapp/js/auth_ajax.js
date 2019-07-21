@@ -16,17 +16,6 @@ window.onload = function () {
         event.preventDefault();
     });
 
-    // $('.dropdown-toggle').on('click', function (event) {
-    //     $.ajax({
-    //         url: loginForm.attr('action'),
-    //         success: function (data) {
-    //             loginFields.html(data.result);
-    //             loginForm.removeClass('was-validated');
-    //         },
-    //     });
-    //     event.preventDefault();
-    // });
-
     loginForm.submit(function (event) {
         $('.invalid').remove();
         loginForm.removeClass('was-validated');
@@ -37,8 +26,6 @@ window.onload = function () {
             success: function (data) {
                 loginFields.html(data.result);
                 if ($(data.result).find('.invalid').length === 0) {
-                    // $('.dropdown').load(" .dropdown-link");
-                    // $('.header-menu').load(" .header-menu>*", "");
                     $('.dropdown').load(" .dropdown>*", "");
                     $('.modals').load(" .modals", "");
                 } else {
@@ -90,7 +77,7 @@ window.onload = function () {
         event.preventDefault();
     });
 
-    // logic for reset password form
+    // logic for forgot password form
 
     let forgotForm = $('.forgot-form');
     let forgotFields = $('.forgot-fields');
