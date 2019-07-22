@@ -160,4 +160,10 @@ window.onload = function () {
         event.preventDefault();
     });
 
+    let pathArray = window.location.pathname.split('/');
+
+    if (pathArray[2] === 'verify') {
+        $('#verificationModalScrollableTitle').modal('show');
+    }
+
 };

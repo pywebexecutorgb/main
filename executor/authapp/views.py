@@ -98,11 +98,8 @@ def verify(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        page_title = 'Verification complete | Python webExecutor'
-        return render(request, 'authapp/email_verification_complete.html', context={'page_title': page_title})
-    else:
-        page_title = 'Verification failed | Python webExecutor'
-        return render(request, 'authapp/email_verification_failed.html', context={'page_title': page_title})
+    page_title = 'Email verification | Python webExecutor'
+    return render(request, 'authapp/email_verification_complete.html', context={'page_title': page_title})
 
 
 class UserPasswordChange(PasswordChangeView):
@@ -131,18 +128,8 @@ class UserPasswordReset(PasswordResetView):
             return super().render_to_response(context, **response_kwargs)
 
 
-class UserPasswordResetDone(PasswordResetDoneView):
-    template_name = 'authapp/password_reset_done.html'
-    extra_context = {'page_title': 'Password reset | Python webExecutor'}
-
-
 class UserPasswordResetConfirm(PasswordResetConfirmView):
     template_name = 'authapp/password_reset_confirm.html'
     form_class = UserSetPasswordForm
     success_url = reverse_lazy('mainapp:index')
     extra_context = {'page_title': 'Password change | Python webExecutor'}
-
-
-class UserPasswordResetComplete(PasswordResetCompleteView):
-    template_name = 'authapp/password_reset_complete.html'
-    extra_context = {'page_title': 'Password reset | Python webExecutor'}
