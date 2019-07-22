@@ -160,6 +160,47 @@ window.onload = function () {
         event.preventDefault();
     });
 
+    // logic for change password form
+
+    $('.header-menu').on('click', '.dropdown-change-password', function (event) {
+        $('#changePasswordModalScrollable').modal('show');
+        $('.modal-body-text').hide();
+        $.ajax({
+            url: $('.dropdown-change-password').attr('href'),
+            success: function (data) {
+                $('.change-password-fields').html(data.result);
+                $('.change-password-form').removeClass('was-validated');
+            },
+        });
+        event.preventDefault();
+    });
+
+    $('.modals').submit('.change-password-form', function (event) {
+        let changePasswordForm = $('.change-password-form');
+        let changePasswordFields = $('.change-password-fields');
+        $('.invalid').remove();
+        changePasswordForm.removeClass('was-validated');
+        $.ajax({
+            data: changePasswordForm.serialize(),
+            type: changePasswordForm.attr('method'),
+            url: changePasswordForm.attr('action'),
+            success: function (data) {
+                changePasswordFields.html(data.result);
+                if ($(data.result).find('.invalid').length === 0) {
+                    $('.modal-body-title').hide();
+                    $('.modal-body-text').show();
+                    changePasswordFields.hide();
+                    $('.change-password-btn').hide();
+                } else {
+                    changePasswordForm.addClass('was-validated');
+                }
+            },
+        });
+        event.preventDefault();
+    });
+
+    // logic for display verification message
+
     let pathArray = window.location.pathname.split('/');
 
     if (pathArray[2] === 'verify') {

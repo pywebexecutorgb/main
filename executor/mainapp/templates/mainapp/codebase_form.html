@@ -81,6 +81,33 @@
     </form>
 
         {% if user.is_authenticated %}
+            <form class="change-password-form px-4" action="{% url 'authapp:password_change' %}" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="modal fade" id="changePasswordModalScrollable" tabindex="-1" role="dialog"
+                     aria-labelledby="changePasswordModalScrollable" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalScrollableTitle">Change password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="modal-body-title">Please enter your old password, for security's sake, and then enter your new
+                                    password twice so we can verify you typed it in correctly.</p>
+                                <p class="modal-body-text">Your password was changed.</p>
+                                <div class="change-password-fields"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="change-password-btn btn btn-primary">Change</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <form class="update-user-form px-4" action="{% url 'authapp:update' user.pk %}" method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <div class="modal fade" id="updateUserModalScrollable" tabindex="-1" role="dialog"
@@ -131,7 +158,7 @@
                             </div>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-change-password" data-toggle="modal" data-target="#exampleModalScrollable">
+                        <a href="{% url 'authapp:password_change' %}" class="dropdown-item dropdown-change-password" data-toggle="modal" data-target="#exampleModalScrollable">
                           Change password
                         </a>
                         <a href="{% url 'authapp:logout' %}" class="dropdown-logout dropdown-item">Log out</a>

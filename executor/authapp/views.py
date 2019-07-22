@@ -13,7 +13,7 @@ from executor import settings
 from authapp.tokens import TokenGenerator
 from authapp.models import PyWebUser
 from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm, UserPasswordResetForm, \
-    UserSetPasswordForm
+    UserSetPasswordForm, UserPasswordChangeForm
 
 from django.http import JsonResponse
 
@@ -104,8 +104,16 @@ def verify(request, uidb64, token):
 
 class UserPasswordChange(PasswordChangeView):
     template_name = 'authapp/password_change_form.html'
+    form_class = UserPasswordChangeForm
     success_url = reverse_lazy('authapp:password_change_done')
     extra_context = {'page_title': 'Password change | Python webExecutor'}
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            result = render_to_string('authapp/_form.html', context)
+            return JsonResponse({'result': result}, safe=False, **response_kwargs)
+        else:
+            return super().render_to_response(context, **response_kwargs)
 
 
 class UserPasswordChangeDone(PasswordChangeDoneView):
