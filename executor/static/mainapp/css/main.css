@@ -25,6 +25,22 @@
         width: 48% !important;
         margin-right: unset !important;
     }
+
+    .CodeMirror {
+        height: 250px !important;
+        border-radius: 3px;
+        border: 1px solid lightgray;
+        padding: 5px !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .CodeMirror {
+        min-height: 100%;
+        border-radius: 3px;
+        border: 1px solid lightgray;
+        padding: 5px !important;
+    }
 }
 
 * {
@@ -55,7 +71,6 @@ header {
     display: flex !important;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 15px;
 }
 
 .header-title:any-link {
@@ -87,23 +102,39 @@ footer {
 
 .input-block,
 .result-block {
-    position: relative;
     width: 50%;
-    margin: 0 5px 0 5px;
     height: 600px;
+}
+
+.input-block {
+    /* spinner use it */
+    position: relative;
+    margin-right: 5px;
+}
+
+.result-block {
+    margin-left: 5px;
 }
 
 .input-form,
 .result {
+    /* profile button use is */
+    position: relative;
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
 }
 
 #id_code_text,
 #output-result {
     flex-grow: 1;
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+#id_dependencies {
+    font-size: 0.9rem;
+    font-family: monospace;
 }
 
 #output-result {
@@ -137,18 +168,33 @@ footer {
     animation: 1s infinite linear blink;
 }
 
-.notification {
-    position: absolute;
+.error {
+    position: fixed;
     z-index: 1;
-    top: 40px;
-    right: 8px;
+    top: 7%;
 
     color: whitesmoke;
     text-align: center;
-    max-width: 50%;
+    min-width: 250px;
+    max-width: 400px;
 
     border-radius: 3px;
     padding: 0 5px;
+    /* using 15px padding upstairs */
+    margin: 0 25px 0 10px;
+}
+
+.view-button {
+    position: absolute;
+    z-index: 1;
+    bottom: 10px;
+    right: 10px;
+
+    opacity: 0.95;
+}
+
+.view-button:hover {
+    opacity: 1;
 }
 
 @keyframes blink {
