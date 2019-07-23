@@ -12,7 +12,6 @@ urlpatterns = [
     path('verify/<slug:uidb64>/<slug:token>/', views.verify, name='verify'),
 
     path('password_change/', views.UserPasswordChange.as_view(), name='password_change'),
-    path('password_change_done/', views.UserPasswordChangeDone.as_view(), name='password_change_done'),
 
     path('password_reset/', views.UserPasswordReset.as_view(), name='password_reset'),
     path('password_reset_confirm/<slug:uidb64>/<slug:token>/', views.UserPasswordResetConfirm.as_view(),

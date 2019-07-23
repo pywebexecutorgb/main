@@ -2,21 +2,21 @@ window.onload = function () {
 
     // logic for login form
 
-    let loginForm = $('.login-form');
-    let loginFields = $('.login-fields');
-
     $('.header-menu').on('click', '.dropdown-toggle', function (event) {
+    // $('.dropdown-toggle').on('click', function (event) {
         $.ajax({
-            url: loginForm.attr('action'),
+            url: $('.login-form').attr('action'),
             success: function (data) {
-                loginFields.html(data.result);
-                loginForm.removeClass('was-validated');
+                $('.login-fields').html(data.result);
+                $('.login-form').removeClass('was-validated');
             },
         });
         event.preventDefault();
     });
 
-    loginForm.submit(function (event) {
+    $('.header-menu').submit('.login-form', function (event) {
+    // $('.login-form').submit(function (event) {
+        let loginForm = $('.login-form');
         $('.invalid').remove();
         loginForm.removeClass('was-validated');
         $.ajax({
@@ -24,10 +24,10 @@ window.onload = function () {
             type: loginForm.attr('method'),
             url: loginForm.attr('action'),
             success: function (data) {
-                loginFields.html(data.result);
+                $('.login-fields').html(data.result);
                 if ($(data.result).find('.invalid').length === 0) {
                     $('.dropdown').load(" .dropdown>*", "");
-                    $('.modals').load(" .modals", "");
+                    $('.modals').load(" .modals>*", "");
                 } else {
                     loginForm.addClass('was-validated');
                 }
@@ -36,12 +36,25 @@ window.onload = function () {
         event.preventDefault();
     });
 
+    // logic for logout
+
+    $('.header-menu').on('click', '.dropdown-logout', function (event) {
+        $.ajax({
+            url: $('.dropdown-logout').attr('href'),
+            success: function () {
+                $('.dropdown').load(" .dropdown>*", "");
+                $('.modals').load(" .modals>*", "");
+            },
+        });
+        event.preventDefault();
+    });
+
     // logic for sign up form
 
-    let signupForm = $('.signup-form');
-    let signupFields = $('.signup-fields');
-
-    $('.dropdown-signup').on('click', function (event) {
+    $('.header-menu').on('click', '.dropdown-signup', function (event) {
+    // $('.dropdown-signup').on('click', function (event) {
+        let signupForm = $('.signup-form');
+        let signupFields = $('.signup-fields');
         $('.modal-body-text').hide();
         signupFields.show();
         $('.signup-btn').show();
@@ -56,7 +69,10 @@ window.onload = function () {
         event.preventDefault();
     });
 
-    signupForm.submit(function (event) {
+    $('.modals').submit('.signup-form', function (event) {
+    // $('.signup-form').submit(function (event) {
+        let signupForm = $('.signup-form');
+        let signupFields = $('.signup-fields');
         $('.invalid').remove();
         signupForm.removeClass('was-validated');
         $.ajax({
@@ -67,8 +83,8 @@ window.onload = function () {
                 signupFields.html(data.result);
                 if ($(data.result).find('.invalid').length === 0) {
                     signupFields.hide();
-                    $('.modal-body-text').show();
                     $('.signup-btn').hide();
+                    $('.modal-body-text').show();
                 } else {
                     signupForm.addClass('was-validated');
                 }
@@ -82,7 +98,10 @@ window.onload = function () {
     let forgotForm = $('.forgot-form');
     let forgotFields = $('.forgot-fields');
 
-    $('.dropdown-forgot').on('click', function (event) {
+    $('.header-menu').on('click', '.dropdown-forgot', function (event) {
+    // $('.dropdown-forgot').on('click', function (event) {
+        let forgotForm = $('.forgot-form');
+        let forgotFields = $('.forgot-fields');
         $('#forgotModalScrollable').modal('show');
         $('.modal-body-title').show();
         $('.modal-body-text').hide();
@@ -99,7 +118,8 @@ window.onload = function () {
         event.preventDefault();
     });
 
-    forgotForm.submit(function (event) {
+    $('.modals').submit('.forgot-form', function (event) {
+    // $('.forgot-form').submit(function (event) {
         $('.invalid').remove();
         forgotForm.removeClass('was-validated');
         $.ajax({
@@ -124,6 +144,7 @@ window.onload = function () {
     // logic for update user form
 
     $('.header-menu').on('click', '.dropdown-user-profile', function (event) {
+    // $('.dropdown-user-profile').on('click', function (event) {
         $('#updateUserModalScrollable').modal('show');
         $.ajax({
             url: $('.dropdown-user-profile').attr('href'),
@@ -136,6 +157,7 @@ window.onload = function () {
     });
 
     $('.modals').submit('.update-user-form', function (event) {
+    // $('.update-user-form').submit(function (event) {
         let updateUserForm = $('.update-user-form');
         let updateUserFields = $('.update-user-fields');
         $('.invalid').remove();
@@ -163,7 +185,11 @@ window.onload = function () {
     // logic for change password form
 
     $('.header-menu').on('click', '.dropdown-change-password', function (event) {
+    // $('.dropdown-change-password').on('click', function (event) {
         $('#changePasswordModalScrollable').modal('show');
+        $('.change-password-fields').show();
+        $('.modal-body-title').show();
+        $('.change-password-btn').show();
         $('.modal-body-text').hide();
         $.ajax({
             url: $('.dropdown-change-password').attr('href'),
@@ -176,6 +202,7 @@ window.onload = function () {
     });
 
     $('.modals').submit('.change-password-form', function (event) {
+    // $('.change-password-form').submit(function (event) {
         let changePasswordForm = $('.change-password-form');
         let changePasswordFields = $('.change-password-fields');
         $('.invalid').remove();

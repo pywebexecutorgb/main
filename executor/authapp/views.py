@@ -7,18 +7,13 @@ from django.core.mail import send_mail
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, \
-    PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView, PasswordChangeView
+from django.http import JsonResponse
 from executor import settings
 from authapp.tokens import TokenGenerator
 from authapp.models import PyWebUser
 from authapp.forms import PyWebUserRegisterForm, PyWebUserUpdateForm, PyWebUserLoginForm, UserPasswordResetForm, \
     UserSetPasswordForm, UserPasswordChangeForm
-
-from django.http import JsonResponse
-
-
-# TODO: .addClass('was-validated') маркирует невалидное поле age зеленым. Пофиксить
 
 
 class UserCreate(CreateView):
@@ -72,7 +67,6 @@ class UserLogin(LoginView):
 
 class UserLogout(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy('mainapp:index')
-    extra_context = {'page_title': 'Logout | Python webExecutor'}
 
 
 def send_verify_email(request, user):
@@ -84,7 +78,12 @@ def send_verify_email(request, user):
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': TokenGenerator().make_token(user),
     })
-    return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+    try:
+        status = send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+    except Exception as e:
+        print(f'{e}')
+        status = f'{e}'
+    return status
 
 
 def verify(request, uidb64, token):
@@ -103,10 +102,9 @@ def verify(request, uidb64, token):
 
 
 class UserPasswordChange(PasswordChangeView):
-    template_name = 'authapp/password_change_form.html'
+    template_name = 'authapp/_form.html'
     form_class = UserPasswordChangeForm
-    success_url = reverse_lazy('authapp:password_change_done')
-    extra_context = {'page_title': 'Password change | Python webExecutor'}
+    success_url = reverse_lazy('mainapp:index')
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -114,11 +112,6 @@ class UserPasswordChange(PasswordChangeView):
             return JsonResponse({'result': result}, safe=False, **response_kwargs)
         else:
             return super().render_to_response(context, **response_kwargs)
-
-
-class UserPasswordChangeDone(PasswordChangeDoneView):
-    template_name = 'authapp/password_change_done.html'
-    extra_context = {'page_title': 'Password change | Python webExecutor'}
 
 
 class UserPasswordReset(PasswordResetView):
