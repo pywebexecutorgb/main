@@ -20,7 +20,7 @@ class UserCreate(CreateView):
     model = PyWebUser
     form_class = PyWebUserRegisterForm
     template_name = 'authapp/_form.html'
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         form.instance.is_active = False
@@ -40,7 +40,7 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
     model = PyWebUser
     form_class = PyWebUserUpdateForm
     template_name = 'authapp/_form.html'
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -55,7 +55,7 @@ class UserLogin(LoginView):
     template_name = 'authapp/_form.html'
 
     def get_redirect_url(self):
-        return reverse_lazy('mainapp:index')
+        return reverse_lazy('index')
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -66,7 +66,7 @@ class UserLogin(LoginView):
 
 
 class UserLogout(LoginRequiredMixin, LogoutView):
-    next_page = reverse_lazy('mainapp:index')
+    next_page = reverse_lazy('index')
 
 
 def send_verify_email(request, user):
@@ -104,7 +104,7 @@ def verify(request, uidb64, token):
 class UserPasswordChange(PasswordChangeView):
     template_name = 'authapp/_form.html'
     form_class = UserPasswordChangeForm
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
@@ -117,7 +117,7 @@ class UserPasswordChange(PasswordChangeView):
 class UserPasswordReset(PasswordResetView):
     template_name = 'authapp/_form.html'
     email_template_name = 'authapp/password_reset_email.html'
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
     from_email = settings.EMAIL_HOST_USER
     form_class = UserPasswordResetForm
 
@@ -132,5 +132,5 @@ class UserPasswordReset(PasswordResetView):
 class UserPasswordResetConfirm(PasswordResetConfirmView):
     template_name = 'authapp/password_reset_confirm.html'
     form_class = UserSetPasswordForm
-    success_url = reverse_lazy('mainapp:index')
+    success_url = reverse_lazy('index')
     extra_context = {'page_title': 'Password change | Python webExecutor'}
