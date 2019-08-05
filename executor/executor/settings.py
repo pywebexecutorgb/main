@@ -120,7 +120,8 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-if DEBUG:
+# if DEBUG:
+if False:
     INTERNAL_IPS = ['127.0.0.1', '::1']
     INSTALLED_APPS.extend(['debug_toolbar',
                            'template_profiler_panel',
