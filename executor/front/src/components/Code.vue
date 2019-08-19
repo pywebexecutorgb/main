@@ -22,6 +22,7 @@
         // imported methods
         getURL: methods.getURL,
         getJSON: methods.getJSON,
+        getCookie: methods.getCookie,
       }
     },
 
@@ -77,9 +78,13 @@
        * make POST request to REST API
        */
       createContainer() {
+        const csrfToken = this.getCookie('csrftoken');
         this.getJSON(this.getURL('createContainer'), {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'}
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          }
         })
           .then(data => sessionStorage.setItem('containerID', data['container_id']))
           .catch(error => this.$store.commit('setError',
