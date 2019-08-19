@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'api.apps.ApiConfig',
     'mainapp.apps.MainappConfig',
     'authapp.apps.AuthappConfig',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -120,8 +122,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# if DEBUG:
-if False:
+if DEBUG:
     INTERNAL_IPS = ['127.0.0.1', '::1']
     INSTALLED_APPS.extend(['debug_toolbar',
                            'template_profiler_panel',
@@ -149,6 +150,9 @@ if False:
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ]
 
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOW_CREDENTIALS = True
+
 BROKER_URL = 'sqla+sqlite:///db.sqlite3'
 CELERY_RESULT_BACKEND = 'db+sqlite:///db.sqlite3'
 
@@ -160,10 +164,21 @@ AUTH_USER_MODEL = 'authapp.PyWebUser'
 
 # TODO: this settings must be changed before production. SMTP server is refusing some email addresses and it gives 500 error
 DOMAIN_NAME = 'http://localhost:8000'
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 465
+# EMAIL_HOST = 'smtp.mail.ru'
+# EMAIL_PORT = 465
 EMAIL_HOST_USER = 'geekshop@list.ru'
-EMAIL_HOST_PASSWORD = 'djangopassword'
-EMAIL_USE_SSL = True
+# EMAIL_HOST_PASSWORD = 'djangopassword'
+# EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'emails'
 
 LOGIN_URL = '/auth/login/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

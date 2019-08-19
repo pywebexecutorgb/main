@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordResetForm, \
     SetPasswordForm, PasswordChangeForm
-from authapp.models import PyWebUser
+
+from authapp.models import PyWebUser, PyWebUserProfile
 
 
 class PyWebUserRegisterForm(UserCreationForm):
@@ -19,11 +20,12 @@ class PyWebUserUpdateForm(UserChangeForm):
     password = None
 
     class Meta:
-        model = PyWebUser
+        model = PyWebUserProfile
         fields = (
-            'email',
-            'first_name',
-            'last_name',
+            # implement multiple forms here:
+            #   'email',
+            #   'first_name',
+            #   'last_name',
             'userphoto',
             'age',
             'gender',

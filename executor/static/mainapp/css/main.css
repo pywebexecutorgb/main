@@ -55,9 +55,11 @@ html, body {
 
 header, footer {
     margin: 5px 0 5px;
-    padding: 0 15px;
+    padding: 0 5px;
     height: 45px;
-    background-color: lightgray;
+    /* background-color: lightgray; */
+    background-color: #424242;
+    color: whitesmoke;
     border-radius: 5px;
 
     align-items: center;
@@ -69,20 +71,107 @@ header {
     display: flex !important;
     flex-direction: row;
     justify-content: space-between;
+
+    padding-left: 15px;
+}
+
+footer {
+    padding-right: 15px;
+    text-align: right;
+
+    line-height: 45px;
+    text-transform: uppercase;
 }
 
 .header-title:any-link {
     display: block;
     color: unset;
-    text-decoration: none;
     text-transform: uppercase;
 }
 
-footer {
-    text-align: right;
+.site-footer:any-link,
+.site-footer a:any-link {
+    color: unset;
+}
 
-    line-height: 45px;
-    text-transform: uppercase;
+.header-menu {
+    position: relative;
+}
+
+.user-profile {
+    position: absolute;
+    z-index: 1;
+    top: 42px;
+    right: 0px;
+
+    border-radius: 5px;
+    border: 1px solid whitesmoke;
+    background-color: #424242;
+
+    padding: 5px;
+    width: 250px;
+
+    text-align: center;
+}
+
+.user-picture {
+    border-radius: 3px;
+    background-color: white;
+    padding: 1px;
+    width: 35px;
+    height: 35px;
+}
+
+.user-profile li {
+    list-style: none;
+}
+
+.user-profile ul {
+    margin: 0px !important;
+}
+
+.user-buttons {
+    width: 100% !important;
+}
+
+.icon-input {
+    width: 40px !important;
+}
+
+.error-input {
+    border: 2px solid orangered !important;
+}
+
+.error-login,
+.error-sign-up {
+    color: orangered;
+    font-weight: 200;
+    text-align: center;
+}
+
+.block-header {
+    text-align: center;
+}
+
+.create-user-form {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+
+    width: 50%;
+    min-width: 250px;
+}
+
+.create-user-buttons {
+    display: flex;
+    width: 100% !important;
+    justify-content: space-around;
+}
+
+.create-user-button {
+    margin: 10px 0;
+    width: 30% !important;
+    min-width: 100px;
 }
 
 .container {

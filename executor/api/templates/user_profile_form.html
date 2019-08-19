@@ -1,0 +1,5 @@
+{% load rest_framework %}
+
+{% csrf_token %}
+{% render_form profile template_pack='rest_framework/vertical' %}
+{% render_form extended_profile template_pack='rest_framework/vertical' %}
