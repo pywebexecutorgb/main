@@ -50,6 +50,7 @@ class PyWebUserProfile(models.Model):
 
 class UserCode(models.Model):
     class Meta:
+        unique_together = ('user', 'code')
         verbose_name = "User's Code"
         verbose_name_plural = "User's Codes"
 

@@ -99,7 +99,7 @@
         if (!containerID) {
           return null;
         }
-        
+
         const csrfToken = this.getCookie('csrftoken');
         fetch(this.getURL('changeContainer', containerID), {
           method: 'DELETE',
