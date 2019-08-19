@@ -34,8 +34,13 @@ class CodeBaseSet(mixins.CreateModelMixin, GenericViewSet):
         if obj.data.get('pk') is None:
             raise RuntimeError("ID is not defined")
         if request.user.is_authenticated:
-            UserCode(user_id=request.user.pk,
-                     code_id=obj.data.get('pk')).save()
+            try:
+                UserCode(user_id=request.user.pk,
+                         code_id=obj.data.get('pk')).save()
+            except Exception:
+                # here we can caught exception,
+                # when user try to save already exist code
+                pass
 
         return HttpResponseRedirect(redirect_to=reverse('api:codeexecution-detail',
                                                         kwargs={'pk': obj.data.get('pk')}))
@@ -189,7 +194,7 @@ class UserCodeSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = UserCodeSerializer
     pagination_class = StandardPaginationSet
     # permission_classes = (IsAuthenticated, )
-    renderer_classes = (JSONRenderer, )
+    renderer_classes = (JSONRenderer,)
 
     def get_queryset(self):
         user = self.request.user
