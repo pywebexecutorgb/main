@@ -148,6 +148,11 @@
         justify-content: center;
     }
 
+    .table-dark,
+    .thead-dark th {
+        background-color: #424242 !important;
+    }
+
     table {
         width: 100%;
         table-layout: fixed;
