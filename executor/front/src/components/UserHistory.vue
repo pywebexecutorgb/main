@@ -1,8 +1,8 @@
 <template>
     <div class="block">
         <h4 class="block-header">User history</h4>
-        <div v-if="user" class="user-form-block">
-            <div v-if="history">
+        <div v-if="user" class="user-history-block">
+            <div v-if="isHistoryCount">
                 <table class="history-block table table-striped table-dark">
                     <colgroup>
                         <col class="link"/>
@@ -77,6 +77,9 @@
       user() {
         return this.$store.getters.getUser;
       },
+      isHistoryCount() {
+        return this.history && this.history.hasOwnProperty('count') && this.history.count > 0;
+      },
     },
 
     watch: {
@@ -106,8 +109,8 @@
             if (response.hasOwnProperty("error")) {
               return this.fetchHistoryMessage = response.error;
             }
+            this.fetchHistoryMessage = 'Form has been fetched.';
             this.history = response;
-            // return this.showSuccess("Profile has been updated.");
           })
           .catch(error => this.fetchHistoryMessage = error);
       },
@@ -138,6 +141,11 @@
 
     .block-header {
         text-align: center;
+    }
+
+    .user-history-block {
+        display: flex;
+        justify-content: center;
     }
 
     table {

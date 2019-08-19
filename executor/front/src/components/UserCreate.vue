@@ -27,7 +27,7 @@
                 <div class="input-group-prepend">
                     <span class="icon-input input-group-text" id="password-addon">&#128273;</span>
                 </div>
-                <input id="password" type="text" class="form-control" placeholder="password"
+                <input id="password" type="password" class="form-control" placeholder="password"
                        v-model="password" aria-describedby="password-addon" @change="isValidPassword()">
             </div>
         </div>
@@ -37,10 +37,8 @@
                 <div class="input-group-prepend">
                     <span class="icon-input input-group-text" id="password-confirm-addon">&#128273;</span>
                 </div>
-                <input id="passwordConfirm" type="text" class="form-control"
-                       placeholder="confirm password"
-                       v-model="passwordConfirm" aria-describedby="password-confirm-addon"
-                       @change="isValidPassword()">
+                <input id="passwordConfirm" type="password" class="form-control" placeholder="confirm password"
+                       v-model="passwordConfirm" aria-describedby="password-confirm-addon" @change="isValidPassword()">
             </div>
         </div>
 
