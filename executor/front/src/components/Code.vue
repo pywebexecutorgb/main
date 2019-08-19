@@ -112,10 +112,12 @@
           return null;
         }
 
+        const csrfToken = this.getCookie('csrftoken');
         fetch(this.getURL('changeContainer', containerID), {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
           },
           body: JSON.stringify({'date': Date.now()}),
         })
