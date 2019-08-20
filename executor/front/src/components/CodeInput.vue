@@ -162,7 +162,7 @@
       copyURL(event) {
         event.target.dataset.defaultValue = event.target.textContent;
 
-        this.$copyText(window.location.origin + this.url)
+        this.$copyText(window.location.href)
           .then(
             // successful
             () => {
