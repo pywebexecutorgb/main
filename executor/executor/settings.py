@@ -11,18 +11,27 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import configparser
+import glob
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Include configs
+INCLUDE_CONFIGS = os.path.join(BASE_DIR, 'confs', '*.ini')
+
+# parse configs
+config = configparser.RawConfigParser()
+config.read(glob.glob(INCLUDE_CONFIGS))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*1&g2_wug-u7$32pb=j6g275gyhb01h^0e3_1*w@6j&wvz^*-i'
+SECRET_KEY = config.get('DEFAULT', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -83,6 +92,9 @@ DATABASES = {
     }
 }
 
+BROKER_URL = 'sqla+sqlite:///db.sqlite3'
+CELERY_RESULT_BACKEND = 'db+sqlite:///db.sqlite3'
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -101,6 +113,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# REST API framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -153,32 +173,23 @@ if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOW_CREDENTIALS = True
 
-BROKER_URL = 'sqla+sqlite:///db.sqlite3'
-CELERY_RESULT_BACKEND = 'db+sqlite:///db.sqlite3'
-
 DOCKERFILE_TEMPLATE = os.path.join(BASE_DIR, 'mainapp', 'templates', 'Dockerfile.j2')
 DOCKERFILE_DIRECTORY = os.path.join(BASE_DIR, 'mainapp', 'templates')
 DOCKER_TEMPORARY_DIRECTORY = '/tmp'
 
 AUTH_USER_MODEL = 'authapp.PyWebUser'
-
-# TODO: this settings must be changed before production. SMTP server is refusing some email addresses and it gives 500 error
-DOMAIN_NAME = 'http://localhost:8000'
-# EMAIL_HOST = 'smtp.mail.ru'
-# EMAIL_PORT = 465
-EMAIL_HOST_USER = 'geekshop@list.ru'
-# EMAIL_HOST_PASSWORD = 'djangopassword'
-# EMAIL_USE_SSL = True
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = 'emails'
-
 LOGIN_URL = '/auth/login/'
+PASSWORD_RESET_TIMEOUT_DAYS = 1
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ]
-}
+# DOMAIN_NAME = 'https://py-exec.ru'
+# EMAIL_PORT = 465
+# EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
+
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = 'emails'

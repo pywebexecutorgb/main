@@ -24,41 +24,41 @@ export default {
     switch (name) {
       // code API
       case "createContainer":
-        return "http://localhost:8000/api/containers/";
+        return "/api/containers/";
       case "saveCode":
-        return "http://localhost:8000/api/code-bases/";
+        return "/api/code-bases/";
       case "execCode":
-        return `http://localhost:8000/api/containers/${param}/codes/`;
+        return `/api/containers/${param}/codes/`;
       case "readCode":
-        return `http://localhost:8000/api/code-executions/${param}/`;
+        return `/api/code-executions/${param}/`;
       case "changeContainer":
-        return `http://localhost:8000/api/containers/${param}/`;
+        return `/api/containers/${param}/`;
 
       // user API
       case "createUser":
-        return "http://localhost:8000/api/users/";
+        return "/api/users/";
       case "showUser":
-        return "http://localhost:8000/api/users/";
+        return "/api/users/";
       case "deleteUser":
-        return `http://localhost:8000/api/users/${param}`;
+        return `/api/users/${param}`;
       case "loginUser":
-        return "http://localhost:8000/api/auth/";
+        return "/api/auth/";
       case "logoutUser":
-        return "http://localhost:8000/api/auth/";
+        return "/api/auth/";
       case "profileUser":
-        return "http://localhost:8000/api/user/profile/";
+        return "/api/user/profile/";
       case "historyUser":
-        return "http://localhost:8000/api/history/";
+        return "/api/history/";
       case "validateEmail":
-        return `http://localhost:8000/api/auth/validate-email/${param}/`;
+        return `/api/auth/validate-email/${param}/`;
       case "initResetPasswordUser":
-        return "http://localhost:8000/api/auth/reset-password/";
+        return "/api/auth/reset-password/";
       case "ResetPasswordUser":
-        return `http://localhost:8000/api/auth/reset-password/${param}/`;
+        return `/api/auth/reset-password/${param}/`;
 
       // short URL
       case "shortURL":
-        return `http://localhost:8000/api/short-url/${param}`;
+        return `/api/short-url/${param}`;
     }
   },
 
