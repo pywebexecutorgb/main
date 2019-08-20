@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {store} from './store';
+import VueClipboard from 'vue-clipboard2'
+import {store} from './store'
 
 import methods from './methods.js'
 
@@ -11,7 +12,6 @@ import UserProfile from './components/UserProfile.vue'
 import UserHistory from './components/UserHistory.vue'
 import UserValidateEmail from './components/UserValidateEmail.vue'
 import UserResetPassword from './components/UserResetPassword.vue'
-
 
 
 Vue.config.productionTip = false;
@@ -40,6 +40,7 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
+Vue.use(VueClipboard);
 new Vue({
   store,
   router,

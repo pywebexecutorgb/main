@@ -1,8 +1,6 @@
 <template>
     <div class="input-block">
         <div id="loader" hidden="hidden"></div>
-        <input id="url-result" type="text" hidden>
-
         <div id="code_create_form" class="input-form">
             <label for="id_code_text">Code text:</label>
             <codemirror id="id_code_text" name="code_text" maxlength="2048" required=""
@@ -154,26 +152,28 @@
 
       /**
        * Copy URL logic:
-       * - get URL from data domain and location in #url-result (return from backend)
-       * - set input unhidden
-       * - select all text in input
-       * - copy string into clipboard
-       * - make input hidden again
-       * Also added logic: make copy button inactive for 2 sec.
+       * - get URL from window.location.origin and url variable
+       * - store current button value (we need to revert button value on next steps)
+       * - using ue-clipboard2: $copyText — store url into clipboard
+       * - change button name as result
+       * - sleep 2 seconds and revert button to active state with original value
        * @param event
        */
       copyURL(event) {
-        let urlInput = document.getElementById('url-result');
-        urlInput.value = window.location.origin + this.url;
-        urlInput.hidden = false;
-        urlInput.select();
-        document.execCommand('copy');
-        urlInput.blur();
-        urlInput.hidden = true;
-
         event.target.dataset.defaultValue = event.target.textContent;
-        event.target.textContent = 'URL copied';
-        event.target.disabled = true;
+
+        this.$copyText(window.location.origin + this.url)
+          .then(
+            // successful
+            () => {
+              event.target.textContent = 'URL copied';
+              event.target.disabled = true;
+            },
+            // error
+            () => {
+              event.target.textContent = 'Copy failed';
+              event.target.disabled = true;
+            });
 
         setTimeout(() => {
           event.target.textContent = event.target.dataset.defaultValue;

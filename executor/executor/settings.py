@@ -181,9 +181,6 @@ AUTH_USER_MODEL = 'authapp.PyWebUser'
 LOGIN_URL = '/auth/login/'
 PASSWORD_RESET_TIMEOUT_DAYS = 1
 
-# DOMAIN_NAME = 'https://py-exec.ru'
-# EMAIL_PORT = 465
-# EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
