@@ -20,7 +20,7 @@ from authapp.models import PyWebUser, PyWebUserProfile, UserCode
 from authapp.utils import TokenGenerator, send_user_email
 from mainapp.models import CodeBase, CodeExecution, Container
 from mainapp.tasks import execute_runtime_code
-from mainapp.utils import ShortURL
+import mainapp.utils
 
 
 class CodeBaseSet(mixins.CreateModelMixin, GenericViewSet):
@@ -328,7 +328,7 @@ class ShortURLView(APIView):
         :param kwargs: dict, get value by 'hash' jey
         :return JSON or 404: {'code_id'}
         """
-        code_id = ShortURL().decode(kwargs.get('hash', 0))
+        code_id = mainapp.utils.ShortURL().decode(kwargs.get('hash', 0))
         get_object_or_404(CodeBaseSet.queryset, pk=code_id)
 
         return JsonResponse({'code_id': code_id})
