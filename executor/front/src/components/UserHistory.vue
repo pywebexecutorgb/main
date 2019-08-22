@@ -19,7 +19,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="raw in history.results" :key="raw">
+                    <tr v-for="raw in history.results" :key="raw.pk">
                         <td>
                             <router-link class="link-href" :to="getCodeLinkById(raw.code.pk)">&ogt;</router-link>
                         </td>

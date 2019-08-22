@@ -15,14 +15,13 @@
 
   export default {
     name: "Code",
-    props: ['pk', 'hash'],
+    props: ['pk'],
 
     data() {
       return {
         // imported methods
         getURL: methods.getURL,
         getJSON: methods.getJSON,
-        getCookie: methods.getCookie,
       }
     },
 
@@ -30,13 +29,6 @@
       CodeInput,
       CodeOutput,
       CodeError
-    },
-
-    created() {
-      this.createContainer();
-      setInterval(this.sendHealthCheck, 10000);
-
-      window.addEventListener('unload', this.deleteContainer());
     },
 
     mounted() {
@@ -71,71 +63,6 @@
           })
           .catch(error => this.$store.commit('setError',
             `Cannot fetch executed code ID ${this['pk']}: ${error.message}`));
-      },
-
-      /**
-       * Function create container on created Vue add:
-       * make POST request to REST API
-       */
-      createContainer() {
-        const csrfToken = this.getCookie('csrftoken');
-        this.getJSON(this.getURL('createContainer'), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-          }
-        })
-          .then(data => sessionStorage.setItem('containerID', data['container_id']))
-          .catch(error => this.$store.commit('setError',
-            `Cannot create init container: ${error.message}`));
-      },
-
-      /**
-       * Remove container on beforeunload action.
-       */
-      deleteContainer() {
-        const containerID = sessionStorage.getItem('containerID');
-        if (!containerID) {
-          return null;
-        }
-
-        const csrfToken = this.getCookie('csrftoken');
-        fetch(this.getURL('changeContainer', containerID), {
-          method: 'DELETE',
-          headers: {
-            'X-CSRFToken': csrfToken,
-          },
-        });
-      },
-
-      /**
-       * Function send PUT request in timeout interval,
-       * by timestamp value we removed unused containers on backend side.
-       */
-      sendHealthCheck() {
-        const containerID = sessionStorage.getItem('containerID');
-        if (!containerID) {
-          return null;
-        }
-
-        const csrfToken = this.getCookie('csrftoken');
-        fetch(this.getURL('changeContainer', containerID), {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-          },
-          body: JSON.stringify({'date': Date.now()}),
-        })
-          .then((response) => {
-            if (response.status !== 204) {
-              throw new Error('received wrong status code');
-            }
-            this.$store.commit('setError', null);
-          })
-          .catch((error) => this.$store.commit('setError',
-            `Error while send container health check, please refresh page. Detail: "${error.message}"`));
       },
     },
   }

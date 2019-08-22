@@ -111,7 +111,7 @@
           dependencies: this.requirements,
         });
 
-        const containerID = sessionStorage.getItem('containerID');
+        const containerID = this.$store.getters.getContainer;
         let url = this.$parent.getURL('saveCode');
         if (!isSave && containerID) {
           url = this.$parent.getURL('execCode', containerID);
