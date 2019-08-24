@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Python webExecutor</title>
 
-    <link rel="icon" href="{% static 'mainapp/img/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'mainapp/img/../../../front/public/img/favicon.ico' %}" type="image/x-icon">
 
     <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror/lib/codemirror.css">
@@ -17,7 +17,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- development vue version -->
-    <!-- <script defer src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script> -->
+   <!-- <script defer src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script> -->
 
     <!-- production vue version -->
     <script defer src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -33,22 +33,17 @@
     <script defer src="{% static 'mainapp/js/components/outputCodeBlock.js' %}"></script>
     <script defer src="{% static 'mainapp/js/components/codeBlock.js' %}"></script>
 
+    <script defer src="{% static 'authapp/js/components/login.js' %}"></script>
+    <script defer src="{% static 'authapp/js/components/createUser.js' %}"></script>
+    <script defer src="{% static 'authapp/js/components/verifyEmail.js' %}"></script>
     <script defer src="{% static 'mainapp/js/mainVue.js' %}"></script>
+
 </head>
 <body>
 <div id="app" class="container">
     <header>
-        <router-link class="header-title" to="{% url 'index' %}">Py Exec</router-link>
-
-        <div class="header-menu">
-            {% if user.is_authenticated %}
-                <a class="menu-auth-link" href="{% url 'authapp:update' %}">update</a>
-                <a class="menu-auth-link" href="{% url 'authapp:logout' %}">logout</a>
-            {% else %}
-                <a class="menu-auth-link" href="{% url 'authapp:register' %}">register</a>
-                <a class="menu-auth-link" href="{% url 'authapp:login' %}">login</a>
-            {% endif %}
-        </div>
+        <router-link class="header-title" to="/">py exec</router-link>
+        <login ref="login"></login>
     </header>
 
     <div class="top">

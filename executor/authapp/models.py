@@ -5,25 +5,35 @@ for creating a superuser, run the commands via 'python manage.py shell':
 """
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
+from django.core.validators import MaxValueValidator, MinValueValidator
 from mainapp.models import CodeBase
 
 
 class PyWebUser(AbstractUser):
-    class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+    username = models.CharField(verbose_name="username", max_length=128, unique=True)
+    email = models.EmailField(verbose_name="email", unique=True)
+    objects = UserManager()
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+
+class PyWebUserProfile(models.Model):
     MALE, FEMALE = 'M', 'F'
-
     GENDER_CHOICES = (
         (MALE, 'Male'),
         (FEMALE, 'Female'),
     )
 
-    email = models.EmailField(verbose_name='email', blank=True, unique=True)
-    userphoto = models.ImageField(verbose_name='userphoto', blank=True)
-    age = models.PositiveIntegerField(verbose_name='age', null=True)
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+
+    user = models.OneToOneField(PyWebUser, on_delete=models.CASCADE)
+    userphoto = models.ImageField(upload_to='userphotos', blank=True)
+    age = models.PositiveIntegerField(verbose_name='age', null=True, blank=True, validators=[MaxValueValidator(100),
+                                                                                             MinValueValidator(1)])
     gender = models.CharField(verbose_name='gender', max_length=1, choices=GENDER_CHOICES, blank=True)
     country = models.CharField(verbose_name='country', max_length=128, blank=True)
     state = models.CharField(verbose_name='state', max_length=128, blank=True)
@@ -35,13 +45,14 @@ class PyWebUser(AbstractUser):
     proglangs = models.CharField(verbose_name='programming languages', max_length=512, blank=True)
 
     def __str__(self):
-        return f"{self.username}'s profile"
+        return f"{self.user.username}'s profile"
 
 
 class UserCode(models.Model):
     class Meta:
+        unique_together = ('user', 'code')
         verbose_name = "User's Code"
         verbose_name_plural = "User's Codes"
 
-    user_id = models.ForeignKey(PyWebUser, on_delete=models.CASCADE)
-    code_id = models.ForeignKey(CodeBase, on_delete=models.CASCADE)
+    user = models.ForeignKey(PyWebUser, on_delete=models.CASCADE)
+    code = models.ForeignKey(CodeBase, on_delete=models.CASCADE)

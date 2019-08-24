@@ -17,17 +17,172 @@
 </head>
 <body>
 <div class="container">
+
+    <div class="modals">
+        <form class="signup-form px-4" action="{% url 'authapp:register' %}" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="modal fade" id="signupModalScrollable" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Sign up</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="modal-body-text">Please check your email for complete the sign up</p>
+                        <div class="signup-fields" style="display: none !important;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="signup-btn btn btn-primary">Sign up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+        <form class="forgot-form px-4" action="{% url 'authapp:password_reset' %}" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="modal fade" id="forgotModalScrollable" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Reset password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="modal-body-title">
+                            Forgotten your password? Enter your email address below, and we'll email instructions
+                            for setting a new one.
+                        </p>
+                        <p class="modal-body-text">
+                            We've emailed you instructions for setting your password, if an account exists with the
+                            email you entered. You should receive them shortly.
+                        </p>
+                        <p class="modal-body-text">
+                            If you don't receive an email, please make sure you've entered the address you registered
+                            with, and check your spam folder.
+                        </p>
+                        <div class="forgot-fields"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="forgot-btn btn btn-primary">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+        {% if user.is_authenticated %}
+            <form class="change-password-form px-4" action="{% url 'authapp:password_change' %}" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="modal fade" id="changePasswordModalScrollable" tabindex="-1" role="dialog"
+                     aria-labelledby="changePasswordModalScrollable" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalScrollableTitle">Change password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="modal-body-title">Please enter your old password, for security's sake, and then enter your new
+                                    password twice so we can verify you typed it in correctly.</p>
+                                <p class="modal-body-text">Your password was changed.</p>
+                                <div class="change-password-fields"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="change-password-btn btn btn-primary">Change</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form class="update-user-form px-4" action="{% url 'authapp:update' user.pk %}" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="modal fade" id="updateUserModalScrollable" tabindex="-1" role="dialog"
+                     aria-labelledby="updateUserModalScrollableTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalScrollableTitle">Update user</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="update-user-fields"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="update-user-btn btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+
     <header>
         <a class="header-title" href="{% url 'index' %}">Py Exec</a>
 
         <div class="header-menu">
-            {% if user.is_authenticated %}
-                <a class="menu-auth-link" href="{% url 'authapp:update' %}">update</a>
-                <a class="menu-auth-link" href="{% url 'authapp:logout' %}">logout</a>
-            {% else %}
-                <a class="menu-auth-link" href="{% url 'authapp:register' %}">register</a>
-                <a class="menu-auth-link" href="{% url 'authapp:login' %}">login</a>
-            {% endif %}
+            <div class="dropdown">
+                <a class="dropdown-toggle dropdown-link" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                    {% if user.is_authenticated %}Profile{% else %}Sign in{% endif %}
+
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+
+                    {% if user.is_authenticated %}
+
+                        <a href="{% url 'authapp:update' user.pk %}" class="dropdown-user-profile">
+                            <img class="user-photo" src="/media/{{ user.userphoto|default:'userphotos/default.svg' }}" alt="{{ user.username }}">
+                            <div class="user-bio">
+                                <h5 class="username">{{ user.username|truncatechars_html:15 }}</h5>
+                                <h6 class="email">{{ user.email|truncatechars_html:15 }}</h6>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'authapp:password_change' %}" class="dropdown-item dropdown-change-password" data-toggle="modal" data-target="#exampleModalScrollable">
+                          Change password
+                        </a>
+                        <a href="{% url 'authapp:logout' %}" class="dropdown-logout dropdown-item">Log out</a>
+
+                    {% else %}
+
+                        <form class="login-form px-4 py-3" action="{% url 'authapp:login' %}" method="post"
+                          enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                            <div class="login-fields"></div>
+                            <button type="submit" class="login-btn btn btn-primary">Sign in</button>
+                        </form>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-signup dropdown-item" data-toggle="modal" data-target="#exampleModalScrollable">
+                          New around here? Sign up
+                        </a>
+                        <a href="#" class="dropdown-forgot dropdown-item" data-toggle="modal" data-target="#exampleModalScrollable">
+                          Forgot password?
+                        </a>
+
+                    {% endif %}
+
+                </div>
+            </div>
         </div>
     </header>
 
@@ -74,7 +229,17 @@
         <a href="https://github.com/pywebexecutorgb">web executor</a> &copy;&nbsp;2019
     </footer>
 </div>
+<script src="http://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 <script src="{% static 'mainapp/js/main.js' %}"></script>
 <script src="{% static 'mainapp/js/code_ajax.js' %}"></script>
+<script src="{% static 'mainapp/js/auth_ajax.js' %}"></script>
 </body>
 </html>

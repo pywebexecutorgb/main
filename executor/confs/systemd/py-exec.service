@@ -1,0 +1,28 @@
+[Unit]
+Description=Gunicorn py-exec backend
+After=network.target auditd.service
+Before=nginx.service
+
+[Service]
+Environment=GEEKBRAINS_VENV=/opt/venvs/py-exec
+Environment=GEEKBRAINS_DATA_DIR=/var/www/py-exec/executor
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/py-exec/executor
+
+PermissionsStartOnly=true
+ExecStartPre=/bin/chown -R www-data /var/run/docker.sock ${GEEKBRAINS_DATA_DIR}
+
+ExecStart=/opt/venvs/py-exec/bin/gunicorn --chdir=${GEEKBRAINS_DATA_DIR}                  \
+                                          --pythonpath=${GEEKBRAINS_VENV}/bin/python3     \
+                                          --workers 3                                     \
+                                          --bind unix:${GEEKBRAINS_DATA_DIR}/py-exec.sock \
+                                          --access-logfile gunicorn-py-exec-access.log    \
+                                          --error-logfile gunicorn-py-exec-error.log      \
+                                          executor.wsgi
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+Alias=py-exec.service
