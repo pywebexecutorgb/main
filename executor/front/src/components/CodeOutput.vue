@@ -3,8 +3,8 @@
         <div class="result form-group">
             <label for="output-result">Result:</label>
             <textarea id="output-result" :class="{'error-message': hasErrors,
-                                                      'blinking': hasNoResult}"
-                      readonly>&#9646; {{resultView}}</textarea>
+                                                  'gray-background': hasNoResult}"
+                      readonly v-model="resultView"></textarea>
             <button id="view-button" class="view-button btn btn-secondary" v-show="hasProfile"
                     @click.prevent="changeView">To {{nextViewsValue}}
             </button>
@@ -53,7 +53,7 @@
     computed: {
       /**
        * Function check, that output or profile exist,
-       *   it's using in blinking text
+       *   it's using for gray background output field
        * @return boolean, true - output and profile are empty
        */
       hasNoResult() {
@@ -69,7 +69,8 @@
       },
 
       /**
-       * Return variable content, that name equal views value
+       * Return variable content, that name equal views value.
+       * If output empty — show cursor only.
        * @return string: output or profile variable content
        */
       resultView() {
@@ -159,20 +160,11 @@
         opacity: 1;
     }
 
-    @keyframes blink {
-        0% {
-            color: black;
-        }
-        50% {
-            color: transparent;
-        }
+    .gray-background {
+        background-color: #f5f5f5;
     }
 
     .error-message {
         color: darkred;
-    }
-
-    .blinking {
-        animation: 1s infinite linear blink;
     }
 </style>

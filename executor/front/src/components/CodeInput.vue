@@ -48,6 +48,7 @@
     data() {
       return {
         isCodeExecuting: false,
+
         code: '',
         requirements: '',
         url: null,
