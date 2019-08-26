@@ -1,6 +1,6 @@
 <template>
     <div class="input-block">
-        <div id="loader" hidden="hidden"></div>
+        <div id="loader" v-show="isCodeExecuting"></div>
         <div id="code_create_form" class="input-form">
             <label for="id_code_text">Code text:</label>
             <codemirror id="id_code_text" name="code_text" maxlength="2048" required=""
@@ -47,6 +47,7 @@
 
     data() {
       return {
+        isCodeExecuting: false,
         code: '',
         requirements: '',
         url: null,
@@ -77,7 +78,8 @@
        * @param event
        */
       enableProcessing(event) {
-        document.getElementById('loader').hidden = false;
+        // spinner show handler
+        this.isCodeExecuting = true;
 
         event.target.dataset.defaultValue = event.target.textContent;
         event.target.textContent = 'Processing...';
@@ -92,7 +94,8 @@
         event.target.textContent = event.target.dataset.defaultValue;
         event.target.disabled = false;
 
-        document.getElementById('loader').hidden = true;
+        // spinner hide handler
+        this.isCodeExecuting = false;
       },
 
       /**
