@@ -7,12 +7,15 @@ import methods from './methods.js'
 
 import App from './App.vue'
 import Code from './components/Code.vue'
-import UserCreate from './components/UserCreate.vue'
 import UserProfile from './components/UserProfile.vue'
 import UserHistory from './components/UserHistory.vue'
-import UserValidateEmail from './components/UserValidateEmail.vue'
-import UserResetPassword from './components/UserResetPassword.vue'
 
+/*
+ * Optimize JS and CSS styles and load this imports only when it needs
+ * import UserCreate from './components/UserCreate.vue'
+ * import UserValidateEmail from './components/UserValidateEmail.vue'
+ * import UserResetPassword from './components/UserResetPassword.vue'
+ */
 
 Vue.config.productionTip = false;
 
@@ -24,12 +27,24 @@ const router = new VueRouter({
     {path: '/code/:pk?', component: Code, props: true},
 
     // users URLs
-    {path: '/user/create', component: UserCreate},
     {path: '/user/profile', component: UserProfile},
     {path: '/user/history', component: UserHistory},
-    {path: '/user/validate-email/:uid/:token', component: UserValidateEmail, props: true},
 
-    {path: '/user/reset-password/:uid/:token', component: UserResetPassword, props: true},
+    // webpack optimization: built app as chunks with import
+    {
+      path: '/user/create',
+      component: () => import('./components/UserCreate.vue')
+    },
+    {
+      path: '/user/validate-email/:uid/:token',
+      props: true,
+      component: () => import('./components/UserValidateEmail.vue')
+    },
+    {
+      path: '/user/reset-password/:uid/:token',
+      props: true,
+      component: () => import('./components/UserResetPassword.vue')
+    },
 
     // redirect URLs
     {
