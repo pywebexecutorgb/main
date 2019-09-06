@@ -10,8 +10,8 @@ class CodeBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CodeBase
-        fields = ('pk', 'code_text', 'dependencies', 'created_at', 'url')
-        lookup_field = 'pk'
+        fields = ("pk", "code_text", "dependencies", "created_at", "url")
+        lookup_field = "pk"
 
 
 class CodeExecutionSerializer(serializers.ModelSerializer):
@@ -19,26 +19,35 @@ class CodeExecutionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CodeExecution
-        fields = ('code', 'has_errors', 'output', 'profile', 'processed_at')
+        fields = ("code", "has_errors", "output", "profile", "processed_at")
 
 
 class ContainerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Container
-        fields = ('container_id', 'created_at', 'last_access_at')
+        fields = ("container_id", "created_at", "last_access_at")
 
 
 class UserOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = PyWebUser
-        exclude = ('is_superuser', 'is_active', 'is_staff', 'user_permissions',
-                   'groups', 'date_joined', 'last_login', 'email', 'password')
+        exclude = (
+            "is_superuser",
+            "is_active",
+            "is_staff",
+            "user_permissions",
+            "groups",
+            "date_joined",
+            "last_login",
+            "email",
+            "password",
+        )
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PyWebUserProfile
-        exclude = ('user', )
+        exclude = ("user",)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,26 +55,33 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PyWebUser
-        extra_kwargs = {'password': {'write_only': True}}
-        exclude = ('is_superuser', 'is_active', 'is_staff', 'user_permissions',
-                   'groups', 'date_joined', 'last_login')
+        extra_kwargs = {"password": {"write_only": True}}
+        exclude = (
+            "is_superuser",
+            "is_active",
+            "is_staff",
+            "user_permissions",
+            "groups",
+            "date_joined",
+            "last_login",
+        )
 
     def _pop_profile(self, validated_data):
-        profile = validated_data.get('pywebuserprofile', {})
+        profile = validated_data.get("pywebuserprofile", {})
         if profile:
             # clean profile data if it's defined
-            validated_data.pop('pywebuserprofile')
+            validated_data.pop("pywebuserprofile")
         return profile
 
     def create(self, validated_data):
         profile = self._pop_profile(validated_data)
 
-        password = validated_data.pop('password')
+        password = validated_data.pop("password")
         instance = PyWebUser.objects.create(**validated_data)
         instance.set_password(password)
         instance.save()
 
-        profile.update({'user': instance})
+        profile.update({"user": instance})
         PyWebUserProfile.objects.create(**profile)
         return instance
 
@@ -75,10 +91,11 @@ class UserSerializer(serializers.ModelSerializer):
 
         PyWebUser.objects.filter(pk=instance.pk).update(
             **{
-                'username': validated_data.pop('username'),
-                'first_name': validated_data.pop('first_name'),
-                'last_name': validated_data.pop('last_name'),
-            })
+                "username": validated_data.pop("username"),
+                "first_name": validated_data.pop("first_name"),
+                "last_name": validated_data.pop("last_name"),
+            }
+        )
 
         return instance
 
@@ -88,4 +105,4 @@ class UserCodeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserCode
-        fields = ('user', 'code')
+        fields = ("user", "code")

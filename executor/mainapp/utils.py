@@ -40,7 +40,7 @@ import docker
 import short_url
 
 
-def convert_output_to_profile(input=''):
+def convert_output_to_profile(input=""):
     """
     Function split input text on output and profile result
     :param input: string, input text
@@ -51,18 +51,18 @@ def convert_output_to_profile(input=''):
 
     profile, output = [], []
     profile_starts_flag = False
-    for line in input.split('\n'):
-        if 'function calls' in line:
+    for line in input.split("\n"):
+        if "function calls" in line:
             profile_starts_flag = True
         if profile_starts_flag:
             profile.append(line)
             continue
         output.append(line)
 
-    return ('\n'.join(output), '\n'.join(profile))
+    return ("\n".join(output), "\n".join(profile))
 
 
-def convert_error_to_profile(input=''):
+def convert_error_to_profile(input=""):
     """
     Function split input text on error text and profile result
     :param input: string, input text
@@ -71,16 +71,16 @@ def convert_error_to_profile(input=''):
     if not input:
         return ("string doesn't defined", None)
 
-    output = input.rsplit('\n\n', 1)
+    output = input.rsplit("\n\n", 1)
     if len(output) > 1:
         # default output equal (profile, error), make it reversed
         return reversed(output[:2])
     return (input, None)
 
 
-def prepare_docker_exec(python_interpreter='python3',
-                        script_data='',
-                        requirements_data=''):
+def prepare_docker_exec(
+    python_interpreter="python3", script_data="", requirements_data=""
+):
     """
     Prepare working directory for running script with Dockerfile
     :param python_interpreter: string python or python3
@@ -94,18 +94,18 @@ def prepare_docker_exec(python_interpreter='python3',
         use_pip = False
         if requirements_data:
             use_pip = True
-            with open(os.path.join(workdir, 'requirements.txt'), 'w') as fh:
+            with open(os.path.join(workdir, "requirements.txt"), "w") as fh:
                 fh.write(requirements_data)
 
-        with open(os.path.join(workdir, 'exec.py'), 'w') as fh:
+        with open(os.path.join(workdir, "exec.py"), "w") as fh:
             fh.write(script_data)
 
-        with open(os.path.join(workdir, 'Dockerfile'), 'w') as fh:
-            fh_template = open(settings.DOCKERFILE_TEMPLATE, 'r')
+        with open(os.path.join(workdir, "Dockerfile"), "w") as fh:
+            fh_template = open(settings.DOCKERFILE_TEMPLATE, "r")
             template = jinja2.Template(fh_template.read())
             fh.write(
-                template.render(python_interpreter=python_interpreter,
-                                use_pip=use_pip))
+                template.render(python_interpreter=python_interpreter, use_pip=use_pip)
+            )
 
     except Exception as e:
         shutil.rmtree(workdir)
@@ -114,7 +114,7 @@ def prepare_docker_exec(python_interpreter='python3',
     return workdir
 
 
-def runtime_container_exec(container_id, script_data='', requirements_data=''):
+def runtime_container_exec(container_id, script_data="", requirements_data=""):
     """
     Execute code in running container
     :param container_id: string
@@ -129,18 +129,20 @@ def runtime_container_exec(container_id, script_data='', requirements_data=''):
     container = Container()
     container.define(container_id)
 
-    container.put(settings.DOCKER_TEMPORARY_DIRECTORY, 'requirements.txt',
-                  requirements_data)
+    container.put(
+        settings.DOCKER_TEMPORARY_DIRECTORY, "requirements.txt", requirements_data
+    )
     if requirements_data:
-        container.put(settings.DOCKER_TEMPORARY_DIRECTORY, 'requirements.txt',
-                      requirements_data)
+        container.put(
+            settings.DOCKER_TEMPORARY_DIRECTORY, "requirements.txt", requirements_data
+        )
         container.exec(
-            f'pip3 install --user -r {settings.DOCKER_TEMPORARY_DIRECTORY}/requirements.txt'
+            f"pip3 install --user -r {settings.DOCKER_TEMPORARY_DIRECTORY}/requirements.txt"
         )
 
-    container.put(settings.DOCKER_TEMPORARY_DIRECTORY, 'exec.py', script_data)
+    container.put(settings.DOCKER_TEMPORARY_DIRECTORY, "exec.py", script_data)
     (exit_code, output) = container.exec(
-        f'python3 -u -m cProfile {settings.DOCKER_TEMPORARY_DIRECTORY}/exec.py'
+        f"python3 -u -m cProfile {settings.DOCKER_TEMPORARY_DIRECTORY}/exec.py"
     )
 
     if exit_code == 0:
@@ -166,9 +168,8 @@ class Container(object):
         tar_info.mtime = time.time()
 
         tar_stream = io.BytesIO()
-        tar_file = tarfile.TarFile(fileobj=tar_stream, mode='w')
-        tar_file.addfile(tarinfo=tar_info,
-                         fileobj=io.BytesIO(content.encode('utf-8')))
+        tar_file = tarfile.TarFile(fileobj=tar_stream, mode="w")
+        tar_file.addfile(tarinfo=tar_info, fileobj=io.BytesIO(content.encode("utf-8")))
         tar_file.close()
 
         tar_stream.seek(0)
@@ -198,10 +199,9 @@ class Container(object):
         Run container (like a "create" and "start")
         :return container id: string
         """
-        self.container = self.client.containers.run(self.image_id,
-                                                    detach=True,
-                                                    stdout=True,
-                                                    stderr=True)
+        self.container = self.client.containers.run(
+            self.image_id, detach=True, stdout=True, stderr=True
+        )
         return self.container_id
 
     def create(self):
@@ -259,10 +259,10 @@ class Docker(Container):
     Basic class for docker operations,
     like a create, show and delete containers.
     """
+
     def __init__(self, dockerfile_dirpath):
         self.client = docker.from_env()
-        self.docker_image, self.build_logs = self._build_image(
-            dockerfile_dirpath)
+        self.docker_image, self.build_logs = self._build_image(dockerfile_dirpath)
 
         self.container = None
 
@@ -279,7 +279,7 @@ class Docker(Container):
         """
         :return string: created image ID (after __init__ call) or None
         """
-        if hasattr(self.docker_image, 'id'):
+        if hasattr(self.docker_image, "id"):
             return self.docker_image.id
         return None
 
@@ -344,10 +344,10 @@ class DockerExec(object):
                 for msg in exec:
                     print(msg)
     """
-    def __init__(self,
-                 python_interpreter='python3',
-                 script_data='',
-                 requirements_data=''):
+
+    def __init__(
+        self, python_interpreter="python3", script_data="", requirements_data=""
+    ):
         """
         Init function of DockerExec
         :param python_interpreter: string 'python' or 'python3'
@@ -371,9 +371,9 @@ class DockerExec(object):
         return_obj.stdout = None
         return_obj.stderr = None
 
-        self.workdir = prepare_docker_exec(self.python_interpreter,
-                                           self.script_data,
-                                           self.requirements_data)
+        self.workdir = prepare_docker_exec(
+            self.python_interpreter, self.script_data, self.requirements_data
+        )
 
         self.client = Docker(self.workdir)
         try:
@@ -383,10 +383,8 @@ class DockerExec(object):
             return_obj.stderr = str(err)
             return return_obj
 
-        return_obj.stdout = container.logs(stdout=True,
-                                           stderr=False).decode('utf-8')
-        return_obj.stderr = container.logs(stdout=False,
-                                           stderr=True).decode('utf-8')
+        return_obj.stdout = container.logs(stdout=True, stderr=False).decode("utf-8")
+        return_obj.stderr = container.logs(stdout=False, stderr=True).decode("utf-8")
         return return_obj
 
     def __exit__(self, *args):
@@ -407,14 +405,15 @@ class ShortURL(object):
         short_cls.decode('bvIhFu')
             1234567890
     """
+
     def __init__(self):
         """
         Init base variable short_url.
         """
-        self.short_url = short_url.UrlEncoder(alphabet=string.ascii_lowercase +
-                                              string.ascii_uppercase +
-                                              '0123456789',
-                                              block_size=0)
+        self.short_url = short_url.UrlEncoder(
+            alphabet=string.ascii_lowercase + string.ascii_uppercase + "0123456789",
+            block_size=0,
+        )
 
     def encode(self, value):
         """

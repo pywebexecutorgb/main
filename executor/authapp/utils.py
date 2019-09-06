@@ -12,22 +12,18 @@ def send_user_email(request, user, action=None):
     subject = message = None
     uid, token = TokenGenerator().generate_token(user)
 
-    if action == 'validate-email':
+    if action == "validate-email":
         subject = f"Please activate your account on {request.get_host()}"
         url = request.build_absolute_uri(
-            reverse('validate-email', kwargs={
-                'uid': uid,
-                'token': token
-            }))
+            reverse("validate-email", kwargs={"uid": uid, "token": token})
+        )
         message = f"Follow the link below to complete the verification:\n{url}"
 
-    elif action == 'reset-password':
+    elif action == "reset-password":
         subject = f"Reset password link on {request.get_host()}"
         url = request.build_absolute_uri(
-            reverse('reset-password', kwargs={
-                'uid': uid,
-                'token': token
-            }))
+            reverse("reset-password", kwargs={"uid": uid, "token": token})
+        )
         message = f"Follow the link below to reset your password:\n{url}"
 
     return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])

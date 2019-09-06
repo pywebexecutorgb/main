@@ -6,6 +6,6 @@ from mainapp.utils import ShortURL
 
 class ShortURLRedirect(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        link = self.kwargs.get('link')
+        link = self.kwargs.get("link")
         codebase_pk = ShortURL().decode(link)
-        return reverse('code', kwargs={'pk': codebase_pk})
+        return reverse("code", kwargs={"pk": codebase_pk})

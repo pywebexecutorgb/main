@@ -63,8 +63,8 @@ class CodeBase(models.Model):
     INTERPRETER_PYTHON3 = 3
 
     INTERPRETER_CHOICES = (
-        (INTERPRETER_PYTHON2, 'python'),
-        (INTERPRETER_PYTHON3, 'python3'),
+        (INTERPRETER_PYTHON2, "python"),
+        (INTERPRETER_PYTHON3, "python3"),
     )
 
     class Meta:
@@ -72,20 +72,22 @@ class CodeBase(models.Model):
         verbose_name_plural = "User's code"
 
     interpreter = models.PositiveSmallIntegerField(
-        verbose_name='Python interpreter version',
+        verbose_name="Python interpreter version",
         choices=INTERPRETER_CHOICES,
-        default=INTERPRETER_PYTHON3)
-    code_text = models.CharField(verbose_name='Code text', max_length=2048)
-    dependencies = models.CharField(verbose_name='requirements.txt',
-                                    max_length=256,
-                                    blank=True,
-                                    default='')
-    hash_digest = models.CharField(verbose_name='SHA-512 digest of code text',
-                                   max_length=128,
-                                   null=True,
-                                   blank=True,
-                                   default=None,
-                                   db_index=True)
+        default=INTERPRETER_PYTHON3,
+    )
+    code_text = models.CharField(verbose_name="Code text", max_length=2048)
+    dependencies = models.CharField(
+        verbose_name="requirements.txt", max_length=256, blank=True, default=""
+    )
+    hash_digest = models.CharField(
+        verbose_name="SHA-512 digest of code text",
+        max_length=128,
+        null=True,
+        blank=True,
+        default=None,
+        db_index=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -100,20 +102,18 @@ class CodeBase(models.Model):
         Return short URL location to CodeBase object
         :return location path: string
         """
-        return reverse('short_link', args=(ShortURL().encode(self.pk), ))
+        return reverse("short_link", args=(ShortURL().encode(self.pk),))
 
-    def save(self,
-             force_insert=False,
-             force_update=False,
-             using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         """
         Digest doesn't include python, because python2 is deprecated
         and we don't allow use it.
         """
         self.hash_digest = sha3_512(
-            self.code_text.encode('utf-8') +
-            self.dependencies.encode('utf-8')).hexdigest()
+            self.code_text.encode("utf-8") + self.dependencies.encode("utf-8")
+        ).hexdigest()
 
         is_code_exist = CodeBase.has_digest(self.hash_digest)
         if is_code_exist:
@@ -132,20 +132,18 @@ class CodeExecution(models.Model):
         verbose_name = "User's code result"
         verbose_name_plural = "User's code results"
 
-    code = models.OneToOneField(CodeBase,
-                                on_delete=models.CASCADE,
-                                primary_key=True)
-    processed_at = models.DateTimeField(verbose_name='Execution timestamp',
-                                        auto_now_add=True)
-    has_errors = models.BooleanField(verbose_name='Does code have errors?',
-                                     default=False)
+    code = models.OneToOneField(CodeBase, on_delete=models.CASCADE, primary_key=True)
+    processed_at = models.DateTimeField(
+        verbose_name="Execution timestamp", auto_now_add=True
+    )
+    has_errors = models.BooleanField(
+        verbose_name="Does code have errors?", default=False
+    )
 
-    output = models.CharField(verbose_name='Code execution result',
-                              max_length=2048)
-    profile = models.CharField(verbose_name='Code profile result',
-                               max_length=2048,
-                               null=True,
-                               default=None)
+    output = models.CharField(verbose_name="Code execution result", max_length=2048)
+    profile = models.CharField(
+        verbose_name="Code profile result", max_length=2048, null=True, default=None
+    )
 
     def __str__(self):
         return f"""{self.pk}:
@@ -159,20 +157,21 @@ class Container(models.Model):
         verbose_name = "Container information"
         verbose_name_plural = "Containers information"
 
-    container_id = models.CharField(verbose_name='Container ID',
-                                    max_length=128,
-                                    blank=True,
-                                    default='',
-                                    db_index=True)
-    created_at = models.DateTimeField(verbose_name='Created timestamp',
-                                      auto_now_add=True)
+    container_id = models.CharField(
+        verbose_name="Container ID",
+        max_length=128,
+        blank=True,
+        default="",
+        db_index=True,
+    )
+    created_at = models.DateTimeField(
+        verbose_name="Created timestamp", auto_now_add=True
+    )
     last_access_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self,
-             force_insert=False,
-             force_update=False,
-             using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         docker = Docker(settings.DOCKERFILE_DIRECTORY)
         docker.run()
 

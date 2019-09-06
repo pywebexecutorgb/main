@@ -13,8 +13,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from api.serializers import CodeBaseSerializer, CodeExecutionSerializer, ContainerSerializer, \
-    UserSerializer, UserProfileSerializer, UserOnlySerializer, UserCodeSerializer
+from api.serializers import (
+    CodeBaseSerializer,
+    CodeExecutionSerializer,
+    ContainerSerializer,
+    UserSerializer,
+    UserProfileSerializer,
+    UserOnlySerializer,
+    UserCodeSerializer,
+)
 from authapp.models import PyWebUser, PyWebUserProfile, UserCode
 from authapp.utils import TokenGenerator, send_user_email
 from mainapp.models import CodeBase, CodeExecution, Container
@@ -30,19 +37,21 @@ class CodeBaseSet(mixins.CreateModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         obj = super(CodeBaseSet, self).create(request, *args, **kwargs)
-        if obj.data.get('pk') is None:
+        if obj.data.get("pk") is None:
             raise RuntimeError("ID is not defined")
         if request.user.is_authenticated:
             try:
-                UserCode(user_id=request.user.pk,
-                         code_id=obj.data.get('pk')).save()
+                UserCode(user_id=request.user.pk, code_id=obj.data.get("pk")).save()
             except Exception:
                 # here we can caught exception,
                 # when user try to save already exist code
                 pass
 
-        return HttpResponseRedirect(redirect_to=reverse('api:codeexecution-detail',
-                                                        kwargs={'pk': obj.data.get('pk')}))
+        return HttpResponseRedirect(
+            redirect_to=reverse(
+                "api:codeexecution-detail", kwargs={"pk": obj.data.get("pk")}
+            )
+        )
 
 
 class CodeExecutionSet(mixins.RetrieveModelMixin, GenericViewSet):
@@ -52,7 +61,7 @@ class CodeExecutionSet(mixins.RetrieveModelMixin, GenericViewSet):
     # http_method_names = ['get']
 
     def retrieve(self, request, pk):
-        queryset = CodeExecution.objects.select_related('code').all()
+        queryset = CodeExecution.objects.select_related("code").all()
 
         data = get_object_or_404(queryset, code__pk=pk)
         serializer = CodeExecutionSerializer(data)
@@ -63,19 +72,20 @@ class CodeExecutionSet(mixins.RetrieveModelMixin, GenericViewSet):
 class ContainerSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()
     serializer_class = ContainerSerializer
-    http_method_names = ['get', 'post', 'put', 'delete']
+    http_method_names = ["get", "post", "put", "delete"]
 
     def list(self, request, *args, **kwargs):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=["post"])
     def codes(self, request, pk):
         serializer = CodeBaseSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        json_result = execute_runtime_code(pk, request.data['code_text'], request.data['dependencies'])
+        json_result = execute_runtime_code(
+            pk, request.data["code_text"], request.data["dependencies"]
+        )
         return JsonResponse(json_result)
 
     def retrieve(self, request, pk):
@@ -86,7 +96,7 @@ class ContainerSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk):
-        datetime_value = datetime.fromtimestamp(request.data.get('date', 0) / (10 ** 3))
+        datetime_value = datetime.fromtimestamp(request.data.get("date", 0) / (10 ** 3))
 
         queryset = Container.objects.filter(container_id=pk)
         if not queryset:
@@ -109,7 +119,7 @@ class ContainerSet(viewsets.ModelViewSet):
 
 
 class UserSet(viewsets.ModelViewSet):
-    queryset = PyWebUser.objects.select_related('pywebuserprofile').all()
+    queryset = PyWebUser.objects.select_related("pywebuserprofile").all()
     serializer_class = UserSerializer
 
     def list(self, request, *args, **kwargs):
@@ -120,9 +130,13 @@ class UserSet(viewsets.ModelViewSet):
         """
         if request.user.is_authenticated:
             user_object = get_object_or_404(UserSet.queryset, pk=request.user.pk)
-            return JsonResponse(UserSerializer(user_object).data, status=status.HTTP_200_OK)
+            return JsonResponse(
+                UserSerializer(user_object).data, status=status.HTTP_200_OK
+            )
 
-        return JsonResponse(data={'error': 'forbidden'}, status=status.HTTP_403_FORBIDDEN)
+        return JsonResponse(
+            data={"error": "forbidden"}, status=status.HTTP_403_FORBIDDEN
+        )
 
     def retrieve(self, request, pk):
         """
@@ -131,7 +145,9 @@ class UserSet(viewsets.ModelViewSet):
         :return JSON: string with object or error message
         """
         if not request.user.is_authenticated or request.user.pk != int(pk):
-            return JsonResponse(data={'error': 'forbidden'}, status=status.HTTP_403_FORBIDDEN)
+            return JsonResponse(
+                data={"error": "forbidden"}, status=status.HTTP_403_FORBIDDEN
+            )
 
         data = get_object_or_404(UserSet.queryset, pk=pk)
         serializer = UserSerializer(data)
@@ -150,11 +166,15 @@ class UserSet(viewsets.ModelViewSet):
             serializer.save()
 
             # send verification email, when create user
-            user_object = PyWebUser.objects.get(pk=serializer.data.get('id'))
-            send_user_email(request, user_object, 'validate-email')
+            user_object = PyWebUser.objects.get(pk=serializer.data.get("id"))
+            send_user_email(request, user_object, "validate-email")
 
-            return JsonResponse({'id': serializer.data.get('id')}, status=status.HTTP_201_CREATED)
-        return JsonResponse({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {"id": serializer.data.get("id")}, status=status.HTTP_201_CREATED
+            )
+        return JsonResponse(
+            {"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     def update(self, request, pk):
         """
@@ -164,7 +184,9 @@ class UserSet(viewsets.ModelViewSet):
         :return JSON: serialized object data
         """
         if not request.user.is_authenticated or request.user.pk != int(pk):
-            return JsonResponse(data={'error': 'forbidden'}, status=status.HTTP_403_FORBIDDEN)
+            return JsonResponse(
+                data={"error": "forbidden"}, status=status.HTTP_403_FORBIDDEN
+            )
 
         serializer = UserSerializer(instance=request.user, data=request.data)
         if serializer.is_valid():
@@ -189,7 +211,7 @@ class UserCodeSet(mixins.ListModelMixin, GenericViewSet):
         page_size = 4
         max_page_size = 1000
 
-    queryset = UserCode.objects.select_related('code').order_by('-code__pk')
+    queryset = UserCode.objects.select_related("code").order_by("-code__pk")
     serializer_class = UserCodeSerializer
     pagination_class = StandardPaginationSet
     # permission_classes = (IsAuthenticated, )
@@ -204,7 +226,7 @@ class UserCodeSet(mixins.ListModelMixin, GenericViewSet):
 
 class ProfileView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'user_profile_form.html'
+    template_name = "user_profile_form.html"
 
     def get(self, request, format=None, *args, **kwargs):
         user = get_object_or_404(PyWebUser, pk=request.user.pk)
@@ -213,25 +235,30 @@ class ProfileView(APIView):
         user_profile = get_object_or_404(PyWebUserProfile, user=request.user.pk)
         extended_profile = UserProfileSerializer(user_profile)
 
-        return Response({'user': user, 'profile': profile,
-                         'extended_profile': extended_profile})
+        return Response(
+            {"user": user, "profile": profile, "extended_profile": extended_profile}
+        )
 
     def post(self, request, format=None, *args, **kwargs):
         user = get_object_or_404(PyWebUser, pk=request.user.pk)
         profile = UserOnlySerializer(user, data=request.data)
         if not profile.is_valid():
-            return JsonResponse({'error': 'Update base profile failed'},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {"error": "Update base profile failed"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         profile.save()
 
         user_profile = get_object_or_404(PyWebUserProfile, user=request.user.pk)
         extended_profile = UserProfileSerializer(user_profile, data=request.data)
         if not extended_profile.is_valid():
-            return JsonResponse({'error': 'Update exteneded profile failed'},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {"error": "Update exteneded profile failed"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         extended_profile.save()
 
-        return JsonResponse({'status': 'updated'}, status=status.HTTP_200_OK)
+        return JsonResponse({"status": "updated"}, status=status.HTTP_200_OK)
 
 
 class AuthView(APIView):
@@ -248,11 +275,14 @@ class AuthView(APIView):
         Authorize user with POST request.
         :return status_code: 204 - successful, 400 - error.
         """
-        user = authenticate(email=request.data.get('email'),
-                            password=request.data.get('password'))
+        user = authenticate(
+            email=request.data.get("email"), password=request.data.get("password")
+        )
         if not user or not user.is_active:
-            return JsonResponse({'error': 'user does not exist or inactive'},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {"error": "user does not exist or inactive"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         login(request, user)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -264,14 +294,18 @@ class ValidateEmailView(APIView):
         Check email validation and activate account with GET request
         :return status_code: 200 - successful, 400 - error.
         """
-        result, user = TokenGenerator().is_token_valid(kwargs.get('uid'), kwargs.get('token'))
+        result, user = TokenGenerator().is_token_valid(
+            kwargs.get("uid"), kwargs.get("token")
+        )
         if result:
             user.is_active = True
             user.save()
             login(request, user)
-            return JsonResponse({'result': 'verified'}, status=status.HTTP_200_OK)
+            return JsonResponse({"result": "verified"}, status=status.HTTP_200_OK)
 
-        return JsonResponse({'error': 'token is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(
+            {"error": "token is incorrect"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class ResetPasswordView(APIView):
@@ -287,13 +321,15 @@ class ResetPasswordView(APIView):
             :param request: waiting for 'email' in data
             :return: JsonResponse object and status code: 200 - ok, 400 - error
             """
-            user = UserSet.queryset.filter(email=request.data.get('email')).first()
+            user = UserSet.queryset.filter(email=request.data.get("email")).first()
             if not user or not user.is_active:
-                return JsonResponse({'error': 'user does not exist or inactive'},
-                                    status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse(
+                    {"error": "user does not exist or inactive"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-            result = send_user_email(request, user, 'reset-password')
-            return JsonResponse({'result': result}, status=status.HTTP_200_OK)
+            result = send_user_email(request, user, "reset-password")
+            return JsonResponse({"result": result}, status=status.HTTP_200_OK)
 
         def _execute_password_reset(request, uid, token):
             """
@@ -305,14 +341,18 @@ class ResetPasswordView(APIView):
             """
             result, user = TokenGenerator().is_token_valid(uid, token)
             if not result:
-                return JsonResponse({'error': 'token is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse(
+                    {"error": "token is incorrect"}, status=status.HTTP_400_BAD_REQUEST
+                )
 
-            user.set_password(request.data.get('password', None))
+            user.set_password(request.data.get("password", None))
             user.save()
-            return JsonResponse({'result': 'password has updated'}, status=status.HTTP_200_OK)
+            return JsonResponse(
+                {"result": "password has updated"}, status=status.HTTP_200_OK
+            )
 
         # main logic: check exists uid and token, if true - reset, false - send reset link
-        uid, token = kwargs.get('uid', None), kwargs.get('token', None)
+        uid, token = kwargs.get("uid", None), kwargs.get("token", None)
         if uid is not None and token is not None:
             return _execute_password_reset(request, uid, token)
 
@@ -327,7 +367,7 @@ class ShortURLView(APIView):
         :param kwargs: dict, get value by 'hash' jey
         :return JSON or 404: {'code_id'}
         """
-        code_id = mainapp.utils.ShortURL().decode(kwargs.get('hash', 0))
+        code_id = mainapp.utils.ShortURL().decode(kwargs.get("hash", 0))
         get_object_or_404(CodeBaseSet.queryset, pk=code_id)
 
-        return JsonResponse({'code_id': code_id})
+        return JsonResponse({"code_id": code_id})
