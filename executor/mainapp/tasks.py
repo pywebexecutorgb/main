@@ -31,8 +31,7 @@ def execute_code(code_id=None):
     code = CodeBase.objects.get(pk=code_id)
     exec_output, exec_error = None, None
     try:
-        with DockerExec(code.get_interpreter_display(),
-                        code.code_text,
+        with DockerExec(code.get_interpreter_display(), code.code_text,
                         code.dependencies) as exec:
             exec_output, exec_error = exec.stdout, exec.stderr
     except Exception as err:
@@ -43,15 +42,18 @@ def execute_code(code_id=None):
         return c_exec.save()
 
     (output, profile) = convert_output_to_profile(exec_output)
-    c_exec = CodeExecution(code=code, has_errors=False,
-                           output=output, profile=profile)
+    c_exec = CodeExecution(code=code,
+                           has_errors=False,
+                           output=output,
+                           profile=profile)
     return c_exec.save()
 
 
 def execute_runtime_code(container_id, code, dependencies):
     exec_output, exec_error = None, None
     try:
-        result_object = runtime_container_exec(container_id, code, dependencies)
+        result_object = runtime_container_exec(container_id, code,
+                                               dependencies)
         exec_output, exec_error = result_object.stdout, result_object.stderr
     except Exception as err:
         exec_error = err

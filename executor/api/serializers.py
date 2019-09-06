@@ -38,7 +38,7 @@ class UserOnlySerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PyWebUserProfile
-        exclude = ('user',)
+        exclude = ('user', )
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -73,11 +73,12 @@ class UserSerializer(serializers.ModelSerializer):
         profile = self._pop_profile(validated_data)
         PyWebUserProfile.objects.filter(user=instance).update(**profile)
 
-        PyWebUser.objects.filter(pk=instance.pk).update(**{
-            'username': validated_data.pop('username'),
-            'first_name': validated_data.pop('first_name'),
-            'last_name': validated_data.pop('last_name'),
-        })
+        PyWebUser.objects.filter(pk=instance.pk).update(
+            **{
+                'username': validated_data.pop('username'),
+                'first_name': validated_data.pop('first_name'),
+                'last_name': validated_data.pop('last_name'),
+            })
 
         return instance
 
