@@ -45,9 +45,7 @@ class PyWebUserProfile(models.Model):
     company = models.CharField(verbose_name="company", max_length=256, blank=True)
     bio = models.TextField(verbose_name="bio", max_length=2048, blank=True)
     socials = models.CharField(verbose_name="socials", max_length=512, blank=True)
-    proglangs = models.CharField(
-        verbose_name="programming languages", max_length=512, blank=True
-    )
+    proglangs = models.CharField(verbose_name="programming languages", max_length=512, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s profile"

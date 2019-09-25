@@ -31,9 +31,7 @@ urlpatterns = [
         ValidateEmailView.as_view(),
         name="validate-email",
     ),
-    path(
-        "auth/reset-password/", ResetPasswordView.as_view(), name="init-reset-password"
-    ),
+    path("auth/reset-password/", ResetPasswordView.as_view(), name="init-reset-password"),
     path(
         "auth/reset-password/<slug:uid>/<slug:token>/",
         ResetPasswordView.as_view(),

@@ -15,14 +15,10 @@ urlpatterns = [
     path("api/", include("api.urls", namespace="api")),
     path("s/<slug:link>", ShortURLRedirect.as_view(), name="short_link"),
     path(
-        "user/validate-email/<slug:uid>/<slug:token>/",
-        http_204_no_content,
-        name="validate-email",
+        "user/validate-email/<slug:uid>/<slug:token>/", http_204_no_content, name="validate-email"
     ),
     path(
-        "user/reset-password/<slug:uid>/<slug:token>/",
-        http_204_no_content,
-        name="reset-password",
+        "user/reset-password/<slug:uid>/<slug:token>/", http_204_no_content, name="reset-password"
     ),
 ]
 

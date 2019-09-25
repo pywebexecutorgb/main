@@ -3,7 +3,8 @@
     padding: 0;
 }
 
-html, body {
+html,
+body {
     min-width: 300px;
     height: 100%;
 }

@@ -36,9 +36,7 @@ def execute_code(code_id=None):
     code = CodeBase.objects.get(pk=code_id)
     exec_output, exec_error = None, None
     try:
-        with DockerExec(
-            code.get_interpreter_display(), code.code_text, code.dependencies
-        ) as exec:
+        with DockerExec(code.get_interpreter_display(), code.code_text, code.dependencies) as exec:
             exec_output, exec_error = exec.stdout, exec.stderr
     except Exception as err:
         exec_error = err

@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueClipboard from 'vue-clipboard2'
-import {store} from './store'
+import {
+  store
+} from './store'
 
 import methods from './methods.js'
 
@@ -23,12 +25,25 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     // main code URLs
-    {path: '/', component: Code},
-    {path: '/code/:pk?', component: Code, props: true},
+    {
+      path: '/',
+      component: Code
+    },
+    {
+      path: '/code/:pk?',
+      component: Code,
+      props: true
+    },
 
     // users URLs
-    {path: '/user/profile', component: UserProfile},
-    {path: '/user/history', component: UserHistory},
+    {
+      path: '/user/profile',
+      component: UserProfile
+    },
+    {
+      path: '/user/history',
+      component: UserHistory
+    },
 
     // webpack optimization: built app as chunks with import
     {

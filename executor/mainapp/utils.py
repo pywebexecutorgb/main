@@ -78,9 +78,7 @@ def convert_error_to_profile(input=""):
     return (input, None)
 
 
-def prepare_docker_exec(
-    python_interpreter="python3", script_data="", requirements_data=""
-):
+def prepare_docker_exec(python_interpreter="python3", script_data="", requirements_data=""):
     """
     Prepare working directory for running script with Dockerfile
     :param python_interpreter: string python or python3
@@ -103,9 +101,7 @@ def prepare_docker_exec(
         with open(os.path.join(workdir, "Dockerfile"), "w") as fh:
             fh_template = open(settings.DOCKERFILE_TEMPLATE, "r")
             template = jinja2.Template(fh_template.read())
-            fh.write(
-                template.render(python_interpreter=python_interpreter, use_pip=use_pip)
-            )
+            fh.write(template.render(python_interpreter=python_interpreter, use_pip=use_pip))
 
     except Exception as e:
         shutil.rmtree(workdir)
@@ -129,13 +125,9 @@ def runtime_container_exec(container_id, script_data="", requirements_data=""):
     container = Container()
     container.define(container_id)
 
-    container.put(
-        settings.DOCKER_TEMPORARY_DIRECTORY, "requirements.txt", requirements_data
-    )
+    container.put(settings.DOCKER_TEMPORARY_DIRECTORY, "requirements.txt", requirements_data)
     if requirements_data:
-        container.put(
-            settings.DOCKER_TEMPORARY_DIRECTORY, "requirements.txt", requirements_data
-        )
+        container.put(settings.DOCKER_TEMPORARY_DIRECTORY, "requirements.txt", requirements_data)
         container.exec(
             f"pip3 install --user -r {settings.DOCKER_TEMPORARY_DIRECTORY}/requirements.txt"
         )
@@ -345,9 +337,7 @@ class DockerExec(object):
                     print(msg)
     """
 
-    def __init__(
-        self, python_interpreter="python3", script_data="", requirements_data=""
-    ):
+    def __init__(self, python_interpreter="python3", script_data="", requirements_data=""):
         """
         Init function of DockerExec
         :param python_interpreter: string 'python' or 'python3'
@@ -411,8 +401,7 @@ class ShortURL(object):
         Init base variable short_url.
         """
         self.short_url = short_url.UrlEncoder(
-            alphabet=string.ascii_lowercase + string.ascii_uppercase + "0123456789",
-            block_size=0,
+            alphabet=string.ascii_lowercase + string.ascii_uppercase + "0123456789", block_size=0
         )
 
     def encode(self, value):

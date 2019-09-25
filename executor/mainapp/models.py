@@ -62,10 +62,7 @@ class CodeBase(models.Model):
     INTERPRETER_PYTHON2 = 2
     INTERPRETER_PYTHON3 = 3
 
-    INTERPRETER_CHOICES = (
-        (INTERPRETER_PYTHON2, "python"),
-        (INTERPRETER_PYTHON3, "python3"),
-    )
+    INTERPRETER_CHOICES = ((INTERPRETER_PYTHON2, "python"), (INTERPRETER_PYTHON3, "python3"))
 
     class Meta:
         verbose_name = "User's code"
@@ -104,9 +101,7 @@ class CodeBase(models.Model):
         """
         return reverse("short_link", args=(ShortURL().encode(self.pk),))
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         """
         Digest doesn't include python, because python2 is deprecated
         and we don't allow use it.
@@ -133,12 +128,8 @@ class CodeExecution(models.Model):
         verbose_name_plural = "User's code results"
 
     code = models.OneToOneField(CodeBase, on_delete=models.CASCADE, primary_key=True)
-    processed_at = models.DateTimeField(
-        verbose_name="Execution timestamp", auto_now_add=True
-    )
-    has_errors = models.BooleanField(
-        verbose_name="Does code have errors?", default=False
-    )
+    processed_at = models.DateTimeField(verbose_name="Execution timestamp", auto_now_add=True)
+    has_errors = models.BooleanField(verbose_name="Does code have errors?", default=False)
 
     output = models.CharField(verbose_name="Code execution result", max_length=2048)
     profile = models.CharField(
@@ -158,20 +149,12 @@ class Container(models.Model):
         verbose_name_plural = "Containers information"
 
     container_id = models.CharField(
-        verbose_name="Container ID",
-        max_length=128,
-        blank=True,
-        default="",
-        db_index=True,
+        verbose_name="Container ID", max_length=128, blank=True, default="", db_index=True
     )
-    created_at = models.DateTimeField(
-        verbose_name="Created timestamp", auto_now_add=True
-    )
+    created_at = models.DateTimeField(verbose_name="Created timestamp", auto_now_add=True)
     last_access_at = models.DateTimeField(auto_now_add=True)
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         docker = Docker(settings.DOCKERFILE_DIRECTORY)
         docker.run()
 

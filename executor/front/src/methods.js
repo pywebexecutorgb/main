@@ -56,7 +56,7 @@ export default {
       case "ResetPasswordUser":
         return `/api/auth/reset-password/${param}/`;
 
-      // short URL
+        // short URL
       case "shortURL":
         return `/api/short-url/${param}`;
     }
